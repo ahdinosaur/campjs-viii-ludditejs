@@ -1,0 +1,42 @@
+{
+  "name": "ludditejs",
+  "version": "0.0.0",
+  "description": "Luddite.js, or how to write quality JavaScript apps using only functions and objects.",
+  "main": "index.js",
+  "scripts": {
+    "start": "budo index.js:bundle.js -d dist --live -- -d",
+    "test:deps": "dependency-check . && dependency-check . --extra --no-dev -i es2040",
+    "test:lint": "standard",
+    "test:node": "NODE_ENV=test run-default tape test/*.js --",
+    "test": "npm-run-all -s test:node test:lint test:deps"
+  },
+  "browserify": {
+    "transform": [
+      "es2040"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahdinosaur/ludditejs.git"
+  },
+  "keywords": [],
+  "author": "Mikey <michael.williams@enspiral.com> (http://dinosaur.is)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ahdinosaur/ludditejs/issues"
+  },
+  "homepage": "https://github.com/ahdinosaur/ludditejs#readme",
+  "devDependencies": {
+    "budo": "^9.4.7",
+    "dependency-check": "^2.7.0",
+    "npm-run-all": "^4.0.1",
+    "nyc": "^10.1.2",
+    "run-default": "^1.0.0",
+    "standard": "^8.6.0",
+    "tape": "^4.6.3"
+  },
+  "dependencies": {
+    "es2040": "^1.2.3",
+    "shazam": "^2.0.0"
+  }
+}
