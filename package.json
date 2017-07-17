@@ -1,5 +1,5 @@
 {
-  "name": "ludditejs",
+  "name": "campjs-viii-ludditejs",
   "version": "0.0.0",
   "description": "Luddite.js, or how to write quality JavaScript apps using only functions and objects.",
   "main": "index.js",
@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ahdinosaur/ludditejs.git"
+    "url": "git+https://github.com/ahdinosaur/campjs-viii-ludditejs.git"
   },
   "keywords": [],
   "author": "Mikey <michael.williams@enspiral.com> (http://dinosaur.is)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ahdinosaur/ludditejs/issues"
+    "url": "https://github.com/ahdinosaur/campjs-viii-ludditejs/issues"
   },
-  "homepage": "https://github.com/ahdinosaur/ludditejs#readme",
+  "homepage": "https://github.com/ahdinosaur/campjs-viii-ludditejs#readme",
   "devDependencies": {
     "ecstatic-lr": "^1.0.1",
     "garnish": "^5.2.0",
