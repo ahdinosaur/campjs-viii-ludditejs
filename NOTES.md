@@ -1,0 +1,47 @@
+- function api's: (standards in userspace)
+  - hyperscript
+  - require
+  - continuables (callbacks)
+  - observ
+  - pull stream
+- ecosystems:
+  - unobtrusive opinions: userspace modules
+  - obtrusive / agressive opinions: es standards
+    - promises (breaks `try catch`)
+    - es modules (breaks `require`)
+- you don't need the kitchen sink
+  - browserify vs webpack: https://gist.github.com/substack/68f8d502be42d5cd4942
+  - too much for one person to understand
+  - babel all the things, really?
+  - promises break debugging
+  - snippet driven development
+- ideology: pros and cons
+  - require vs import / export
+
+
+- arc?
+  - what does luddite mean?
+  - history of JS
+    - es1-5
+    - Node.js
+    - es6+ tc39
+  - Node.js-inspired userspace standards (vs tc39-inspired kitchen sink)
+    - sync function
+      - require
+        - vs import / export
+           - how many ways to import / export?
+      - hyperscript
+    - async function
+      - continuable
+        - debugging practices
+          - how promises deliberately break these practices
+      - observable
+      - pull stream
+    - interfaces
+      - leveldown / up
+      - browserify
+    - stories
+      - catstack
+      - patchwork / bay
+
+
