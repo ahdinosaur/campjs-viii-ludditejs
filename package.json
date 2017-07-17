@@ -4,16 +4,15 @@
   "description": "Luddite.js, or how to write quality JavaScript apps using only functions and objects.",
   "main": "index.js",
   "scripts": {
-    "start": "budo index.js:bundle.js -d dist --live -- -d",
-    "test:deps": "dependency-check . && dependency-check . --extra --no-dev -i es2040",
-    "test:lint": "standard",
-    "test:node": "NODE_ENV=test run-default tape test/*.js --",
-    "test": "npm-run-all -s test:node test:lint test:deps"
-  },
-  "browserify": {
-    "transform": [
-      "es2040"
-    ]
+    "present": "ecstatic .",
+    "build": "markdown-to-slides -t 'Luddite.js' README.md -o index.html -s index.css -j index.js -i",
+    "watch": "npm run build -- -w",
+    "livereload": "wtch -d . -e html,css,png,gif,jpg | garnish --level debug",
+    "static": "ecstatic-lr .",
+    "start": "npm-run-all -p watch livereload static",
+    "dist": "mkdir -p dist && bash -c 'cp *.{js,html,css,png,jpg,jpeg} dist'",
+    "push": "gh-pages -d dist",
+    "deploy": "npm-run-all -s dist build push"
   },
   "repository": {
     "type": "git",
@@ -27,16 +26,14 @@
   },
   "homepage": "https://github.com/ahdinosaur/ludditejs#readme",
   "devDependencies": {
-    "budo": "^9.4.7",
-    "dependency-check": "^2.7.0",
+    "ecstatic-lr": "^1.0.1",
+    "garnish": "^5.2.0",
+    "gh-pages": "^0.11.0",
     "npm-run-all": "^4.0.1",
-    "nyc": "^10.1.2",
-    "run-default": "^1.0.0",
-    "standard": "^8.6.0",
-    "tape": "^4.6.3"
+    "wtch": "^4.0.1"
   },
   "dependencies": {
-    "es2040": "^1.2.3",
-    "shazam": "^2.0.0"
+    "ecstatic": "^0.8.0",
+    "markdown-to-slides": "^1.0.3"
   }
 }
