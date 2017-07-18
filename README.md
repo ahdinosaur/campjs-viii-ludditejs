@@ -27,17 +27,108 @@ apologies in advance if i disguise any opinions as facts.
 
 # what?
 
-this talk is a mashup of a few topics:
-
-- why you only need simple functions and objects to build complex systems
-- why the best modules should not have any added sugar
-- how "mad science" led to the success of Node.js and thus JavaScript
-- why TC39 (the committee behind ES6+) is bad for JavaScript
-- why you should ignore "modern JavaScript" (promises, classes, `async` / `await`, generators, and beyond).
+luddite.js is a JavaScript framework to make building apps fun again
 
 ---
 
-# first, some simplified history...,
+## who are the Luddites?
+
+[Luddites](https://en.wikipedia.org/wiki/Luddite) are people against _centralized technology_ which decreases quality of life.
+
+---
+
+
+## what is luddite.js?
+
+a movement against _centralized standards_ which decreases developer experience
+
+---
+
+## what centralized standards?
+
+---
+
+### tc39
+
+a great team advancing the state of the art in JavaScript,
+
+but is one of _many_ possible opinions about JavaScript.
+
+---
+
+### what other opinions?
+
+---
+
+what if i told you...
+
+that you only needed plain functions and objects?
+
+---
+
+### modules
+
+```js
+// randomCat.js
+const { random: randomCat } = require('cat-names')
+
+module.exports = randomCat
+```
+
+???
+
+we first create a `const` variable from a sync `require` function.
+
+we assign the result of this to a global variable `module.exports`
+
+not the hundred million special syntaxes to import and export es modules
+
+
+## functions
+
+```js
+// randomCatAsync.js
+const randomCat = require('./randomCat')
+
+module.exports = function randomCatAsync (cb) {
+  try {
+    cb(null, randomCat())
+  } catch (err) {
+    cb(err)
+  }
+}
+---
+
+## sync functions
+
+
+```
+function fn () {
+  try {
+    return value()
+  } catch (err) {}
+}
+```
+
+## async functions
+
+### `cb(err, value())
+
+## aids
+
+- [eating your own dog food](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)
+- [mad science method](https://github.com/ahdinosaur/mad-science-handbook/blob/master/collaboration.md#the-mad-science-cycle)
+- [do-ocracy](https://communitywiki.org/wiki/DoOcracy)
+- marathon: keep a slow & steady pace one step at a time
+- if you see a job that needs doing, it's your job to do (do-ocrarcy)
+- too much sugar is bad for your health (simple interfaces)
+
+## blocks
+
+- cave method: try to design or implement the _perfect_ system before sharing it
+- [design by committee](https://en.wikipedia.org/wiki/Design_by_committee)
+- sprint: hype, mania, and burn-out
+- [waterfall design](https://en.wikipedia.org/wiki/Waterfall_model)
 
 ---
 
@@ -46,6 +137,8 @@ this talk is a mashup of a few topics:
 ## nobody cares about JavaScript
 
 > it's a toy language
+
+---
 
 ## Ryan Dahl (@ry) creates Node.js
 
