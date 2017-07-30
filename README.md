@@ -87,7 +87,7 @@ that you only needed plain functions and objects?
 
 ----
 
-## sync function
+## sync function syntax
 
 ```js
 function fn (...args) { return value }
@@ -101,14 +101,20 @@ const fn = (...args) => { return value }
 const fn = (...args) => value
 ```
 
-
 ```js
 const fn = (...args) => ({ value })
 ```
 
 ---
 
-## sync function error
+## sync function signals
+
+with a sync function, there are two possible signals:
+
+1. value: `return value`
+2. error: `throw error`
+
+???
 
 ```js
 function fn (...args) { throw error }
@@ -124,6 +130,15 @@ try {
 
 ---
 
+## import / export
+
+```js
+import thing from 'module'
+import { thing as thingy } from 'module'
+```
+
+---
+
 ## require / module.exports =
 
 ```js
@@ -134,15 +149,6 @@ module.exports = thing
 ```js
 const { thing: thingy } = require('module')
 module.exports = { thing: thingy }
-```
-
----
-
-## vs: import / export
-
-```js
-import thing from 'module'
-import { thing as thingy } from 'module'
 ```
 
 ---
@@ -165,14 +171,41 @@ function Table ({ rows ) {
 
 ---
 
+## vs: hyperx
+
+```js
+const hyperx = require('hyperx')
+const React = require('react')
+const html = hyperx(React.createElement)
+```
+
+```js
+module.exports = Table
+
+function Table ({ rows ) {
+  return html`<table class='table'>
+    ${rows.map(row => {
+      html`<tr class='row'>
+        ${row.map(item => {
+          html`<td class='item'>${item}</td>`
+        })}
+      </tr>`
+    })}
+  </table>`
+}
+```
+
+
+---
+
 ## vs: jsx
 
 ```js
 const React = require('react')
 
-export default function Table ({ rows ) {
+export default function Table ({ table }) {
   return <table className='table'>
-    {rows.map(row => {
+    {table.map(row => {
       <tr className='row'>
         {row.map(item => {
           <td className='item'>{item}</td>
@@ -185,199 +218,142 @@ export default function Table ({ rows ) {
 
 ---
 
-async function
+## async function
+
+```js
+const request = require('request')
+const parallel = require('run-parallel')
+
+module.exports = fetchCats
+
+function fetchCats ({ cats }, cb) {
+  return parallel(cats.map(cat => {
+    return request(cat, cb)
+  }))
+})
+```
 
 ---
 
-continable
+## promise
 
----
+a "promise" is an eventual values
 
-vs: promise
 
----
+a "continuable" is a function that takes a single argument, a node-style (error-1st) callback.
 
-callback errors
-
----
-
-promise errors
-
----
-
-observ-able
-
----
-
-vs: es observable
-
----
-
-pull stream
-
----
-
-vs: wg-streams
-
----
-
-why am i picking on tc39?
-
----
-
-top-down decision-making
-
----
-
-bloat
-
-- show code size of chrome
-- fast software is less about building muscle and more about losing weight
-  - refactor in less code, not more fancy code
-
----
-
-snippet-driven development
-
-- short snippets supposedly easier for beginners
-  - i work at a developer bootcamp, i'm not so sure
-    - too many ways to do something is confusing
-    - not being able to understand the primitive is confusing
-
----
-
-what is a standard?
-
-- anything that enough people use is a "standard"
-
-example: `feross/standard`
-
----
-
-how to we do better standards?
-
-less coupling to trendy libraries, more function signature conventions: https://twitter.com/jekrb/status/859242655011745793
-
----
-
-### redux
-
----
-
-### tc39
-
-a great team advancing the state of the art in JavaScript,
-
-but is one of _many_ possible JavaScript standards.
-
----
-
-### what other standards?
-
----
-
-what if i told you...
-
-that anyone can make a JavaScript _standard_?
-
----
-
-## standards in the wild
-
----
-
-### Node.js core
-
----
-
-#### `require`
-
----
-
-#### `callback(error, result)`
+```js
+const promise = new Promise((resolve, reject) => {
+  // do stuff...
+  resolve(value)
+  // or
+  reject(error)
+}
 
 ???
 
-- simple, less edge cases
-  - for example, promise edge cases: https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
-- callback hell vs promise hell
+```js
+module.exports = fetchCats
+
+function fetchCats ({ cats }) {
+  return Promise.all(cats.map(cat => {
+    return fetch(cat)
+  }))
+})
+```
 
 ---
 
-##### `async` ecosystem
+## continuable
 
-to make callbacks sane
+a "continuable" is a function that takes a single argument, a node-style (error-1st) callback.
 
----
-
-#### programmer errors
+```js
+const continuable = (cb) => {
+  // do stuff...
+  cb(null, data)
+  // or
+  cb(error)
+}
+```
 
 ???
 
-- promises deliberately break this paradigm: https://blog.domenic.me/youre-missing-the-point-of-promises/
-- i blame promises because they capture any thrown errors, which means thrown programmer errors (syntax, bad args, ...) are now swallowed. - https://twitter.com/ahdinosaur/status/864782131666370560
-- i'm curious how others deal with this. should i give up on simple intuition and embrace the new JS complexity with more complex dev tools? - https://twitter.com/ahdinosaur/status/864785376644218880
-- complexity is cruise control for cool. look at how many things i can do! the technical singularity will save us from our debt, all good bro.
+a continuable is the callback version of a promise
+
+- [`continuable`](https://github.com/Raynos/continuable)
+- [`cont`](https://github.com/dominictarr/cont)
+
+
+```js
+const request = require('request')
+const parallel = require('run-parallel')
+
+module.exports = fetchCats
+
+function fetchCats ({ cats }) {
+  return cb => parallel(cats.map(cat => {
+    return request(cat, cb)
+  }))
+})
+```
 
 ---
 
-### Node.js userland
+## async errors
 
+with a error-first callback, there are three possible signals:
+
+1. programmer error: `throw error`
+2. value: `cb(null, value)`
+3. user error: `cb(error)`
 
 ???
 
+promise errors smush the user and programmer errors together
 
 ---
 
-#### hyperscript
-
----
-
-#### continuables
-
----
-
-#### observ-ables
-
----
-
-#### pull streams
-
+## redux
 
 ???
 
-- [history of streams](http://dominictarr.com/post/145135293917/history-of-streams)
-- [pull stream examples](https://github.com/dominictarr/pull-stream-examples)
-- [pull streams intro](http://dominictarr.com/post/149248845122/pull-streams-pull-streams-are-a-very-simple)
-- [pull stream](https://pull-stream.github.io/)
-- [pull stream workshop](https://github.com/pull-stream/pull-stream-workshop)
+- actions
+- reducers
+- global state tree
 
-differences with node streams:
+---
 
-- something you can't do using node streams (and probably wg-streams too), return a partial stream pipeline: https://twitter.com/ahdinosaur/status/860057158934712320
-- pull streams have pipeline error propagation by default, which is what `pump` does to get around node stream errors being per `.pipe()`.
-- pull streams don't buffer by default, which is what `syncthrough` does to get around node stream buffers.
+## pull stream
+
+---
+
+### source
+
+```js
+
+```
+
+---
+
+## pull stream errors
+
+with a pull stream callback, there are four possible signals:
+
+1. programmer error: `throw error`
+2. value: `cb(null, value)`
+3. user error: `cb(error)`
+4. complete: `cb(true)`
 
 
-#### redux
-
-#### http middleware
-
-#### depject
+---
 
 ## stories
 
-### why
+---
 
-> When engineering is about “solving interesting problems” and never about why these are problems, you get stuff like Uber.
+### catstack
 
-https://twitter.com/sanspoint/status/856185837582790655
+---
 
-### Node.js core
-
-- https://developer.ibm.com/node/2017/04/20/keeping-node-js-core-small/
-
-
-## references
-
-- [The Post JavaScript Apocalypse - Douglas Crockford](https://www.youtube.com/watch?v=NPB34lDZj3E)
+### patch\*

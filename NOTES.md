@@ -279,3 +279,175 @@ TODO luddite.js apps:
 - http://loopjs.com/
 - https://scuttlebot.io/
 - https://choo.io/
+
+----
+----
+
+```
+
+---
+
+vs: wg-streams
+
+---
+
+why am i picking on tc39?
+
+---
+
+top-down decision-making
+
+---
+
+bloat
+
+- show code size of chrome
+- fast software is less about building muscle and more about losing weight
+  - refactor in less code, not more fancy code
+
+---
+
+snippet-driven development
+
+- short snippets supposedly easier for beginners
+  - i work at a developer bootcamp, i'm not so sure
+    - too many ways to do something is confusing
+    - not being able to understand the primitive is confusing
+
+---
+
+what is a standard?
+
+- anything that enough people use is a "standard"
+
+example: `feross/standard`
+
+---
+
+how to we do better standards?
+
+less coupling to trendy libraries, more function signature conventions: https://twitter.com/jekrb/status/859242655011745793
+
+---
+
+### redux
+
+---
+
+### tc39
+
+a great team advancing the state of the art in JavaScript,
+
+but is one of _many_ possible JavaScript standards.
+
+---
+
+### what other standards?
+
+---
+
+what if i told you...
+
+that anyone can make a JavaScript _standard_?
+
+---
+
+## standards in the wild
+
+---
+
+### Node.js core
+
+---
+
+#### `require`
+
+---
+
+#### `callback(error, result)`
+
+???
+
+- simple, less edge cases
+  - for example, promise edge cases: https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
+- callback hell vs promise hell
+
+---
+
+##### `async` ecosystem
+
+to make callbacks sane
+
+---
+
+#### programmer errors
+
+???
+
+- promises deliberately break this paradigm: https://blog.domenic.me/youre-missing-the-point-of-promises/
+- i blame promises because they capture any thrown errors, which means thrown programmer errors (syntax, bad args, ...) are now swallowed. - https://twitter.com/ahdinosaur/status/864782131666370560
+- i'm curious how others deal with this. should i give up on simple intuition and embrace the new JS complexity with more complex dev tools? - https://twitter.com/ahdinosaur/status/864785376644218880
+- complexity is cruise control for cool. look at how many things i can do! the technical singularity will save us from our debt, all good bro.
+
+---
+
+### Node.js userland
+
+
+???
+
+
+---
+
+#### hyperscript
+
+---
+
+#### continuables
+
+---
+
+#### observ-ables
+
+---
+
+#### pull streams
+
+
+???
+
+- [history of streams](http://dominictarr.com/post/145135293917/history-of-streams)
+- [pull stream examples](https://github.com/dominictarr/pull-stream-examples)
+- [pull streams intro](http://dominictarr.com/post/149248845122/pull-streams-pull-streams-are-a-very-simple)
+- [pull stream](https://pull-stream.github.io/)
+- [pull stream workshop](https://github.com/pull-stream/pull-stream-workshop)
+
+differences with node streams:
+
+- something you can't do using node streams (and probably wg-streams too), return a partial stream pipeline: https://twitter.com/ahdinosaur/status/860057158934712320
+- pull streams have pipeline error propagation by default, which is what `pump` does to get around node stream errors being per `.pipe()`.
+- pull streams don't buffer by default, which is what `syncthrough` does to get around node stream buffers.
+
+
+#### redux
+
+#### http middleware
+
+#### depject
+
+## stories
+
+### why
+
+> When engineering is about “solving interesting problems” and never about why these are problems, you get stuff like Uber.
+
+https://twitter.com/sanspoint/status/856185837582790655
+
+### Node.js core
+
+- https://developer.ibm.com/node/2017/04/20/keeping-node-js-core-small/
+
+
+## references
+
+- [The Post JavaScript Apocalypse - Douglas Crockford](https://www.youtube.com/watch?v=NPB34lDZj3E)
