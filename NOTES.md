@@ -451,3 +451,26 @@ https://twitter.com/sanspoint/status/856185837582790655
 ## references
 
 - [The Post JavaScript Apocalypse - Douglas Crockford](https://www.youtube.com/watch?v=NPB34lDZj3E)
+
+---
+
+like framing
+
+- here's luddite.js
+  - we are against centralized committees and decion-making
+  - gonna show some examples of the luddite way to do things
+- there's a centralized committee making JavaScript standards
+  - it's cool, but it's not the only way
+  - here's how some people have been doing things for a while now
+  - anyone can make standards
+- here's the committee way to do X
+  - here's the luddite way to do X
+- at the end of the day, programming is supposed to be fun and anyone can play around with fun standards if they want.
+
+- if you don't use fancy syntax (jsx, etc), you don't need fancy build steps
+
+- add back es observables vs observ-ables
+- move redux to be a quinteesential example of a function signature standard over fancy syntax or library
+
+- acknowledge that pull streams could be its own talk
+  - link to actual talks

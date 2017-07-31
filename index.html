@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>campjs-viii-2017</title>
+		<title>Luddite.js</title>
 		<style>
 			body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -93,7 +93,7 @@ code {
 
 ---
 
-## hey [CampJS VIII](http://viii.campjs.com)
+## hey [CampJS](http://campjs.com)
 
 i'm [Mikey (@ahdinosaur)](http://dinosaur.is) from [Enspiral](http://enspiral.com)
 
@@ -112,188 +112,414 @@ slides are available at <http://dinosaur.is/campjs-viii-ludditejs>.
 
 second time presenting at a conference.
 
+i might say negative things about some JavaScript patterns, but i use those patterns too.
+
+everyone in the JavaScript community is doing a wonderful job.
+
 apologies in advance if i disguise any opinions as facts.
 
 ---
 
-# what?
+## what?
 
-this talk is a mashup of a few topics:
-
-- why you only need simple functions and objects to build complex systems
-- why the best modules should not have any added sugar
-- how "mad science" led to the success of Node.js and thus JavaScript
-- why TC39 (the committee behind ES6+) is bad for JavaScript
-- why you should ignore "modern JavaScript" (promises, classes, `async` / `await`, generators, and beyond).
-
----
-
-# first, some simplified history...,
-
----
-
-# 2009
-
-## nobody cares about JavaScript
-
-> it's a toy language
-
-## Ryan Dahl (@ry) creates Node.js
-
-[watch the original presentation](https://www.youtube.com/watch?v=ztspvPYybIY)
-
-> To provide a *purely evented*, *non-blocking* infrastructure to script *highly concurrent* programs.
-
-(original website [here](https://web.archive.org/web/20091003131634/http://nodejs.org/))
-
+**luddite.js** is _simple decentralized JavaScript_.
 
 ???
 
-// core-less node? https://github.com/nodejs/node/issues/7098
-// https://github.com/nucleus-js/design
+but really a study of functional JavaScript patterns that have evolved in userland
 
 ---
 
-## function
+## Luddite?
+
+the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement against _automated centralized technology_.
+
+<div style='display: flex; justify-content: center'>
+  <img src="./luddite.jpg" height='400' />
+</div>
+
+???
+
+- many Luddites were skilled machine operators in the textile industry
+- they attacked centralized factories who used automated machines operated by unskilled labor
+- they wanted machines to make high-quality goods, run by workers who had gone through an apprenticeship and got paid decent wages
+
+---
+
+## but JavaScript?
+
+i'm going to talk about
+
+- simple functional patterns
+- decentralized userland ecosystems
+
+???
+
+- less coupling to trendy libraries, more function signature conventions: https://twitter.com/jekrb/status/859242655011745793
+- top-down standards process
+  - vs emergent (mad science) bottom-up module ecosystems
+    - izs pants post
+
+---
+
+## simple functional patterns
+
+what if i told you...
+
+that you only needed plain functions and objects?
+
+???
+
+- no fancy syntax necessary
+- less language clutter
+
+----
+
+## sync function syntax
 
 ```js
-function (...args) {
-  return value
+function fn (...args) { return value }
+```
+
+```js
+const fn = (...args) => value
+```
+
+---
+
+## sync function signals
+
+with a sync function, there are two possible signals:
+
+1. value: `return value`
+2. error: `throw error`
+
+???
+
+```js
+function fn (...args) { throw error }
+```
+
+```js
+try {
+  fn(...args)
+} catch (const err) {
+  // handle error
 }
 ```
 
 ---
 
-## module
-
-here's the CommonJS module system, as used and popularized by Node.js
+## require / module.exports =
 
 ```js
-// cat.js
-require('cat-names').random
+const thing = require('module')
+module.exports = thing
 ```
-```js
-// cat-loop.js
-const cat = require('./cat')
 
-setInterval(() => {
-  console.log(cat())
-})
+```js
+const { thing: thingy } = require('module')
+module.exports = { thing: thingy }
 ```
 
 ---
 
-# [the module wrapper](https://nodejs.org/api/modules.html#modules_the_module_wrapper)
-
-every module is actually wrapped in a closure
+## vs: import / export
 
 ```js
-(function (exports, require, module, __filename, __dirname) {
-  // your module code actually lives in here
-})
+import thing from 'module'
+import { thing as thingy } from 'module'
 ```
 
 ---
 
-# [how require works](https://github.com/maxogden/art-of-node#how-require-works)
+## hyperscript
 
-> When you call `require('some_module')` in node here is what happens:
->
-> 1. if a file called `some_module.js` exists in the current folder node will load that, otherwise:
-> 2. node looks in the current folder for a `node_modules` folder with a `some_module` folder in it
-> 3. if it doesn't find it, it will go up one folder and repeat step 2
->
-> This cycle repeats until node reaches the root folder of the filesystem, at which point it will then check any global module folders (e.g. `/usr/local/node_modules` on Mac OS) and if it still doesn't find `some_module` it will throw an exception.
+```js
+const h = require('react-hyperscript')
 
----
+module.exports = Table
 
-# [the Node aesthetic](http://substack.net/node_aesthetic)
-
-> - Callback austerity: Simplicity, asyncronous nature and nice additions that are included like the event system.
-> - Limited surface area: Using modules instead of extending them, NPM, re-usable interfaces and simple, consistent function calls.
-> - Batteries not included: Only few modules in the core distribution – reduces clutter, version dependencies and bureaucracy.
-> - Radical reusability: Breaking up a problem in small pieces, NPM module locations, great versioning approach
-
-
----
-
-# factory
-
-> “The problem with object-oriented languages is they’ve got all this implicit environment that they carry around with them. You wanted a banana but what you got was a gorilla holding the banana and the entire jungle.” ~ Joe Armstrong
-
-- [The Two Pillars of JavaScript Part 1: How to Escape the 7th Circle of Hell](https://medium.com/javascript-scene/the-two-pillars-of-javascript-ee6f3281e7f3)
-- [`stampit`](https://github.com/stampit-org/stampit)
+function Table ({ rows ) {
+  return h('table.table', rows.map(row => {
+    h('tr.row', row.map(item => {
+      h('td.item', item)
+    })
+  })
+}
+```
 
 ???
 
-TODO two ways of handling errors: throw err and cb(err)
-how it's important to throw 'programmer errors'
+- `React.createElement` is basically a strict hyperscript without the class/id sugar
 
 ---
 
-# callback
+## vs: hyperx
 
-- [`run-series`](https://github.com/feross/run-series)
-- [`run-parallel`](https://github.com/feross/run-parallel)
-- [`run-auto`](https://github.com/feross/run-auto)
-- [`run-waterfall`](https://github.com/feross/run-waterfall)
+```js
+const hyperx = require('hyperx')
+const React = require('react')
+const html = hyperx(React.createElement)
+```
+
+```js
+module.exports = Table
+
+function Table ({ rows ) {
+  return html`<table class='table'>
+    ${rows.map(row => {
+      html`<tr class='row'>
+        ${row.map(item => {
+          html`<td class='item'>${item}</td>`
+        })}
+      </tr>`
+    })}
+  </table>`
+}
+```
 
 ---
 
-# continuable
+## vs: jsx
+
+```js
+const React = require('react')
+
+export default function Table ({ table }) {
+  return <table className='table'>
+    {table.map(row => {
+      <tr className='row'>
+        {row.map(item => {
+          <td className='item'>{item}</td>
+        })}
+      </tr>
+    })
+  </table>
+}
+```
+
+---
+
+## redux
+
+reducer:
+
+```js
+(state, action) => nextState
+```
+
+---
+
+???
+
+- actions
+- reducers
+- global state tree
+
+---
+
+## async function
+
+```js
+const request = require('request')
+const parallel = require('run-parallel')
+
+module.exports = fetchCats
+
+function fetchCats ({ cats }, cb) {
+  return parallel(cats.map(cat => {
+    return request(cat, cb)
+  }))
+})
+```
+
+---
+
+## promise
+
+a "promise" is an eventual value
+
+```js
+const promise = new Promise((resolve, reject) => {
+  // do stuff...
+  resolve(value)
+  // or
+  reject(error)
+}
+
+???
+
+```js
+module.exports = fetchCats
+
+function fetchCats ({ cats }) {
+  return Promise.all(cats.map(cat => {
+    return fetch(cat)
+  }))
+})
+```
+
+---
+
+## continuable
 
 a "continuable" is a function that takes a single argument, a node-style (error-1st) callback.
 
 ```js
 const continuable = (cb) => {
   // do stuff...
-  cb(err, data)
+  cb(null, data)
+  // or
+  cb(error)
 }
 ```
+
+???
+
+a continuable is the callback version of a promise
 
 - [`continuable`](https://github.com/Raynos/continuable)
 - [`cont`](https://github.com/dominictarr/cont)
 
----
 
-# observable
+```js
+const request = require('request')
+const parallel = require('run-parallel')
 
-> - `thing()` gets the value
-> - `thing.set(...)` sets the value
-> - `thing(function (value) { ... })` listens to the value.
+module.exports = fetchCats
 
-- [`observ`](https://github.com/Raynos/observ)
-- [`observable`](https://github.com/dominictarr/observable)
-- [`push-stream`](https://github.com/ahdinosaur/push-stream)
-- [`mutant`](https://github.com/mmckegg/mutant)
-
----
-
-# stream
-
-- [`pull-stream`](https://pull-stream.github.io)
-- [pull streams](http://dominictarr.com/post/149248845122/pull-streams-pull-streams-are-a-very-simple)
-- [pull-stream-examples](https://github.com/dominictarr/pull-stream-examples)
+function fetchCats ({ cats }) {
+  return cb => parallel(cats.map(cat => {
+    return request(cat, cb)
+  }))
+})
+```
 
 ---
 
-# references
+## async errors
 
-- [es2040](https://github.com/ahdinosaur/es2040)
-- [Art of Node](https://github.com/maxogden/art-of-node)
-- [Art of I/O](http://ioschool.is/art-of-io/sessions/0/?notes=true)
-- [Tiny Guide to Non Fancy Node](https://github.com/yoshuawuyts/tiny-guide-to-non-fancy-node)
+with a error-first callback, there are three possible signals:
+
+1. value: `cb(null, value)`
+2. user error: `cb(error)`
+3. programmer error: `throw error`
 
 ???
 
-TODO luddite.js apps:
+promise errors smush the user and programmer errors together
 
-- https://webtorrent.io/
-- http://standardjs.com/
-- https://peermaps.github.io/
-- http://loopjs.com/
-- https://scuttlebot.io/
-- https://choo.io/
+---
+
+## pull stream
+
+???
+
+- [history of streams](http://dominictarr.com/post/145135293917/history-of-streams)
+- [pull stream examples](https://github.com/dominictarr/pull-stream-examples)
+- [pull streams intro](http://dominictarr.com/post/149248845122/pull-streams-pull-streams-are-a-very-simple)
+- [pull stream](https://pull-stream.github.io/)
+- [pull stream workshop](https://github.com/pull-stream/pull-stream-workshop)
+
+---
+
+### source
+
+```js
+function values (array) {
+  var i = 0
+  function read (abort, callback) {
+    if (abort || i === array.length) cb(true)
+    else cb(null, array[i++]
+  }
+}
+```
+
+???
+
+- look ma, just functions!
+
+---
+
+### sink
+
+```js
+function log (read) {
+  read(null, function next (err, data) {
+    if (err) return console.log(err)
+    console.log(data)
+    // recursively call read again!
+    read(null, next)
+  })
+}
+```
+
+---
+
+### through
+
+```js
+function map (mapper) {
+  // a sink function: accept a source
+  return function (read) {
+    // but return another source!
+    return function (abort, cb) {
+      read(abort, function (err, data) {
+        // if the stream has ended, pass that on.
+        if (err) cb(err)
+        // apply a mapping to that data
+        else cb(null, mapper(data))
+      })
+    }
+  }
+}
+```
+
+---
+
+## pull stream errors
+
+with a pull stream source callback, there are four possible signals:
+
+1. value: `cb(null, value)`
+2. user error: `cb(error)`
+3. programmer error: `throw error`
+4. complete: `cb(true)`
+
+???
+
+- both the source and sink can signal back-pressure ("hey i'm busy") by not calling the respective callback
+
+---
+
+## stories
+
+---
+
+### catstack
+
+build a framework alone from scratch
+
+learnings:
+
+- choose your battles
+- one person team is anti-pattern
+
+???
+
+reinvent all the wheels!
+
+---
+
+### patch ecosystem
+
+build an app with others, bring-your-own framework modules
+
+learnings:
+
+- do what you think #SomebodyShould do
+- collaborate with active listening and empathy
 
 		</textarea>
 		<script>require=(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({"components/printing":[function(require,module,exports){

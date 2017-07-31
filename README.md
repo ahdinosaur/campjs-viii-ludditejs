@@ -2,7 +2,7 @@
 
 ---
 
-## hey [CampJS VIII](http://viii.campjs.com)
+## hey [CampJS](http://campjs.com)
 
 i'm [Mikey (@ahdinosaur)](http://dinosaur.is) from [Enspiral](http://enspiral.com)
 
@@ -21,7 +21,7 @@ slides are available at <http://dinosaur.is/campjs-viii-ludditejs>.
 
 second time presenting at a conference.
 
-i'm going to attack some JavaScript patterns, but i use those patterns too.
+i might say negative things about some JavaScript patterns, but i use those patterns too.
 
 everyone in the JavaScript community is doing a wonderful job.
 
@@ -35,15 +35,7 @@ apologies in advance if i disguise any opinions as facts.
 
 ???
 
-a study of JavaScript evolution
-
-also totally made up
-
-JavaScript was good
-
-now it's popular
-
-here's the beef
+but really a study of functional JavaScript patterns that have evolved in userland
 
 ---
 
@@ -51,7 +43,9 @@ here's the beef
 
 the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement against _automated centralized technology_.
 
-<img src="./luddite.jpeg" />
+<div style='display: flex; justify-content: center'>
+  <img src="./luddite.jpg" height='400' />
+</div>
 
 ???
 
@@ -63,18 +57,21 @@ the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement a
 
 ## but JavaScript?
 
-at the
+i'm going to talk about
 
-- simple primitives
-- decentralized userland
+- simple functional patterns
+- decentralized userland ecosystems
 
 ???
 
+- less coupling to trendy libraries, more function signature conventions: https://twitter.com/jekrb/status/859242655011745793
 - top-down standards process
   - vs emergent (mad science) bottom-up module ecosystems
     - izs pants post
 
-## simple primitives
+---
+
+## simple functional patterns
 
 what if i told you...
 
@@ -82,7 +79,7 @@ that you only needed plain functions and objects?
 
 ???
 
-- no fancy syntax
+- no fancy syntax necessary
 - less language clutter
 
 ----
@@ -94,15 +91,7 @@ function fn (...args) { return value }
 ```
 
 ```js
-const fn = (...args) => { return value }
-```
-
-```js
 const fn = (...args) => value
-```
-
-```js
-const fn = (...args) => ({ value })
 ```
 
 ---
@@ -130,15 +119,6 @@ try {
 
 ---
 
-## import / export
-
-```js
-import thing from 'module'
-import { thing as thingy } from 'module'
-```
-
----
-
 ## require / module.exports =
 
 ```js
@@ -149,6 +129,15 @@ module.exports = thing
 ```js
 const { thing: thingy } = require('module')
 module.exports = { thing: thingy }
+```
+
+---
+
+## vs: import / export
+
+```js
+import thing from 'module'
+import { thing as thingy } from 'module'
 ```
 
 ---
@@ -168,6 +157,10 @@ function Table ({ rows ) {
   })
 }
 ```
+
+???
+
+- `React.createElement` is basically a strict hyperscript without the class/id sugar
 
 ---
 
@@ -195,7 +188,6 @@ function Table ({ rows ) {
 }
 ```
 
-
 ---
 
 ## vs: jsx
@@ -218,6 +210,24 @@ export default function Table ({ table }) {
 
 ---
 
+## redux
+
+reducer:
+
+```js
+(state, action) => nextState
+```
+
+---
+
+???
+
+- actions
+- reducers
+- global state tree
+
+---
+
 ## async function
 
 ```js
@@ -237,10 +247,7 @@ function fetchCats ({ cats }, cb) {
 
 ## promise
 
-a "promise" is an eventual values
-
-
-a "continuable" is a function that takes a single argument, a node-style (error-1st) callback.
+a "promise" is an eventual value
 
 ```js
 const promise = new Promise((resolve, reject) => {
@@ -304,9 +311,9 @@ function fetchCats ({ cats }) {
 
 with a error-first callback, there are three possible signals:
 
-1. programmer error: `throw error`
-2. value: `cb(null, value)`
-3. user error: `cb(error)`
+1. value: `cb(null, value)`
+2. user error: `cb(error)`
+3. programmer error: `throw error`
 
 ???
 
@@ -314,37 +321,84 @@ promise errors smush the user and programmer errors together
 
 ---
 
-## redux
+## pull stream
 
 ???
 
-- actions
-- reducers
-- global state tree
-
----
-
-## pull stream
+- [history of streams](http://dominictarr.com/post/145135293917/history-of-streams)
+- [pull stream examples](https://github.com/dominictarr/pull-stream-examples)
+- [pull streams intro](http://dominictarr.com/post/149248845122/pull-streams-pull-streams-are-a-very-simple)
+- [pull stream](https://pull-stream.github.io/)
+- [pull stream workshop](https://github.com/pull-stream/pull-stream-workshop)
 
 ---
 
 ### source
 
 ```js
+function values (array) {
+  var i = 0
+  function read (abort, callback) {
+    if (abort || i === array.length) cb(true)
+    else cb(null, array[i++]
+  }
+}
+```
 
+???
+
+- look ma, just functions!
+
+---
+
+### sink
+
+```js
+function log (read) {
+  read(null, function next (err, data) {
+    if (err) return console.log(err)
+    console.log(data)
+    // recursively call read again!
+    read(null, next)
+  })
+}
+```
+
+---
+
+### through
+
+```js
+function map (mapper) {
+  // a sink function: accept a source
+  return function (read) {
+    // but return another source!
+    return function (abort, cb) {
+      read(abort, function (err, data) {
+        // if the stream has ended, pass that on.
+        if (err) cb(err)
+        // apply a mapping to that data
+        else cb(null, mapper(data))
+      })
+    }
+  }
+}
 ```
 
 ---
 
 ## pull stream errors
 
-with a pull stream callback, there are four possible signals:
+with a pull stream source callback, there are four possible signals:
 
-1. programmer error: `throw error`
-2. value: `cb(null, value)`
-3. user error: `cb(error)`
+1. value: `cb(null, value)`
+2. user error: `cb(error)`
+3. programmer error: `throw error`
 4. complete: `cb(true)`
 
+???
+
+- both the source and sink can signal back-pressure ("hey i'm busy") by not calling the respective callback
 
 ---
 
@@ -354,6 +408,24 @@ with a pull stream callback, there are four possible signals:
 
 ### catstack
 
+build a framework alone from scratch
+
+learnings:
+
+- choose your battles
+- one person team is anti-pattern
+
+???
+
+reinvent all the wheels!
+
 ---
 
-### patch\*
+### patch ecosystem
+
+build an app with others, bring-your-own framework modules
+
+learnings:
+
+- do what you think #SomebodyShould do
+- collaborate with active listening and empathy
