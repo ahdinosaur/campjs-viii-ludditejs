@@ -110,23 +110,21 @@ slides are available at <http://dinosaur.is/campjs-viii-ludditejs>.
 
 ???
 
-second time presenting at a conference.
-
-i might say negative things about some JavaScript patterns, but i use those patterns too.
-
-everyone in the JavaScript community is doing a wonderful job.
-
-apologies in advance if i disguise any opinions as facts.
+- second time presenting at a conference.
+- i might say negative things about some JavaScript patterns, but i use those patterns too
+  - yes i'm bitter about some things, i'll try to be honest
+- everyone in the JavaScript community is doing a wonderful job
+- apologies in advance if i disguise any opinions as facts
 
 ---
 
 ## what?
 
-**luddite.js** is _simple decentralized JavaScript_.
+luddite.js
 
 ???
 
-but really a study of functional JavaScript patterns that have evolved in userland
+so...
 
 ---
 
@@ -143,37 +141,105 @@ the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement a
 - many Luddites were skilled machine operators in the textile industry
 - they attacked centralized factories who used automated machines operated by unskilled labor
 - they wanted machines to make high-quality goods, run by workers who had gone through an apprenticeship and got paid decent wages
+- they used fictious characters to make their story ring
 
 ---
 
-## but JavaScript?
+## luddite.js?
 
-i'm going to talk about
+**luddite.js** is a (made-up) meme for _simple decentralized JavaScript_.
 
-- simple functional patterns
 - decentralized userland ecosystems
+  - not centralized core committees
+- simple patterns based on function signatures
+  - not trendy libraries that lock you in
 
 ???
 
-- less coupling to trendy libraries, more function signature conventions: https://twitter.com/jekrb/status/859242655011745793
-- top-down standards process
-  - vs emergent (mad science) bottom-up module ecosystems
-    - izs pants post
+- gonna lead you on a journey through the luddite way to do things
+- a study of functional JavaScript patterns that have evolved in userland
 
 ---
 
-## simple functional patterns
+## decent userland
 
 what if i told you...
 
-that you only needed plain functions and objects?
+that anyone can create a _standard_?
+
+???
+
+- no corporate sponsorship necessary
+
+---
+
+## what is a standard?
+
+anything that enough people use is a "standard"
+
+example: ["standard style"](https://github.com/feross/standard)
+
+```
+npm install --global standard
+```
+
+???
+
+- tc39 is a great team advancing the state of the art in JavaScript,
+  - but the standards produced by tc39 are only one of _many_ possible JavaScript standards.
+- what other standards can you think of?
+  - JS syntax: babel plugins
+  - front-end: react
+  - back-end: express
+  - anything "best practice"
+
+---
+
+## what is a _luddite.js_ standard?
+
+a standard based on a function signature
+
+example: [Redux](https://redux.js.org) reducers
+
+```js
+const reducer = (state, action) => nextState
+```
+
+???
+
+- standard function signature
+- what other standards based on function signatures can you think of?
+  - express / connect: (req, res, next)
+
+---
+
+## why is this important?
+
+- easy to use and test
+- accessible for anyone to participate
+- no module lock-in
+
+???
+
+- you can test the functions directly without using the module
+- you don't need anyone's approval to write a "function specification"
+- you can swap libraries that are compatible with the "function specification"
+
+---
+
+## simple functional
+
+what if i told you...
+
+that you only needed _plain functions and objects_?
 
 ???
 
 - no fancy syntax necessary
-- less language clutter
+  - less language clutter
+- how can we apply this pattern to the full stack?
 
-----
+---
 
 ## sync function syntax
 
@@ -210,30 +276,95 @@ try {
 
 ---
 
-## require / module.exports =
+## es module
+
+also known as `import` and `export`
+
+```js
+import thing from 'module'
+
+export default thing
+```
+
+```js
+import { thing as thingy } from 'module'
+
+export const thing = thingy
+```
+
+???
+
+- why new syntax?
+  - there's myths that es modules do something new
+    - something about "tree shaking" 
+  - anything possible with es modules is possible without
+    - common shake
+  - who knew developers were so superstitious
+- what is happening here?
+  - confusing to beginners who don't understand the special syntax and complex implementation details
+- breaks CommonJS code with default
+  - yes, i'm bitter about this, i've lost many hours debugging broken code, only to realize the module author published a patch version that broke the CommonJS exports
+
+---
+
+## vs. node modules
+
+also known as `require` and `module.exports =`
 
 ```js
 const thing = require('module')
+
 module.exports = thing
 ```
 
 ```js
 const { thing: thingy } = require('module')
+
 module.exports = { thing: thingy }
 ```
 
+???
+
+- it's just a function!
+- implementation details are simple:
+  - `fs.readFileSync` the module file
+  - wrap in closure to provide global variables like `require`, `module`, `exports`, `global`
+  - run code in JavaScript interpreter
+  - capture result of `module.exports` variable
+- when i started using Node.js from Python, `require`-as-a-function is what excited me the most
+  - so yes, i'm somewhat bitter that now JavaScript is adopting the same syntax as Python
+
 ---
 
-## vs: import / export
+## jsx
 
 ```js
-import thing from 'module'
-import { thing as thingy } from 'module'
+const React = require('react')
+
+export default function Table ({ table }) {
+  return <table className='table'>
+    {table.map(row => {
+      <tr className='row'>
+        {row.map(item => {
+          <td className='item'>{item}</td>
+        })}
+      </tr>
+    })
+  </table>
+}
 ```
+
+???
+
+- made by Facebook to make React easier to use
+- looks friendly on the surface, but underneath has non-obvious edge cases
+  - hides that React is actually `React.createElement` function calls
+  - "why can't i use `if () { first } else { second }`?
+  - can only use expressions, not statements
 
 ---
 
-## hyperscript
+## vs: hyperscript
 
 ```js
 const h = require('react-hyperscript')
@@ -279,60 +410,9 @@ function Table ({ rows ) {
 }
 ```
 
----
-
-## vs: jsx
-
-```js
-const React = require('react')
-
-export default function Table ({ table }) {
-  return <table className='table'>
-    {table.map(row => {
-      <tr className='row'>
-        {row.map(item => {
-          <td className='item'>{item}</td>
-        })}
-      </tr>
-    })
-  </table>
-}
-```
-
----
-
-## redux
-
-reducer:
-
-```js
-(state, action) => nextState
-```
-
----
-
 ???
 
-- actions
-- reducers
-- global state tree
-
----
-
-## async function
-
-```js
-const request = require('request')
-const parallel = require('run-parallel')
-
-module.exports = fetchCats
-
-function fetchCats ({ cats }, cb) {
-  return parallel(cats.map(cat => {
-    return request(cat, cb)
-  }))
-})
-```
+- similar to JSX, but uses existing language features: tagged template string
 
 ---
 
@@ -344,7 +424,7 @@ a "promise" is an eventual value
 const promise = new Promise((resolve, reject) => {
   // do stuff...
   resolve(value)
-  // or
+  // oh no!
   reject(error)
 }
 
@@ -364,13 +444,13 @@ function fetchCats ({ cats }) {
 
 ## continuable
 
-a "continuable" is a function that takes a single argument, a node-style (error-1st) callback.
+a "continuable" is a function that takes a single argument, a node-style error-first callback.
 
 ```js
 const continuable = (cb) => {
   // do stuff...
   cb(null, data)
-  // or
+  // oh no!
   cb(error)
 }
 ```
@@ -378,6 +458,8 @@ const continuable = (cb) => {
 ???
 
 a continuable is the callback version of a promise
+
+can be passed around as an "eventual value", same as promises. but without the resolved, pending, rejected state machine complexity.
 
 - [`continuable`](https://github.com/Raynos/continuable)
 - [`cont`](https://github.com/dominictarr/cont)
@@ -400,7 +482,7 @@ function fetchCats ({ cats }) {
 
 ## async errors
 
-with a error-first callback, there are three possible signals:
+with a node-style error-first callback, there are three possible signals:
 
 1. value: `cb(null, value)`
 2. user error: `cb(error)`
@@ -408,7 +490,9 @@ with a error-first callback, there are three possible signals:
 
 ???
 
-promise errors smush the user and programmer errors together
+- promise errors smush the user and programmer errors together
+- promises wrap all your handlers in a `try` / `catch`, so even if you have a different opinion about error handling, promises will force it's opinion on you
+  - yes, i'm bitter about this, i've lost many hours trying to figure out where my errors went
 
 ---
 
@@ -426,23 +510,44 @@ promise errors smush the user and programmer errors together
 
 ### source
 
+example:
+
 ```js
 function values (array) {
   var i = 0
-  function read (abort, callback) {
-    if (abort || i === array.length) cb(true)
-    else cb(null, array[i++]
+  return (abort, callback) => {
+    if (abort || i === array.length) {
+      callback(true)
+    }
+    else {
+      cb(null, array[i++]
+    }
   }
 }
+```
+
+usage:
+
+```js
+const source = values([0, 1, 2, 3])
+
+source(null, (err, value) {
+  console.log('first value:', value)
+})
+// first value: 0
 ```
 
 ???
 
 - look ma, just functions!
+- yes, we are using callbacks even for synchronous results
+  - much faster this way, no reason to delay til next tick
 
 ---
 
 ### sink
+
+example:
 
 ```js
 function log (read) {
@@ -455,9 +560,40 @@ function log (read) {
 }
 ```
 
+usage:
+
+```js
+const source = values([0, 1, 2, 3])
+
+log(source)
+// 0
+// 1
+// 2
+// 3
+```
+
+???
+
+with continuables:
+
+```js
+function log (read) {
+  return (cb) => {
+    read(null, function next (err, data) {
+      if (err) return cb(err)
+      console.log(data)
+      // recursively call read again!
+      read(null, next)
+    })
+  }
+}
+```
+
 ---
 
 ### through
+
+example:
 
 ```js
 function map (mapper) {
@@ -476,9 +612,36 @@ function map (mapper) {
 }
 ```
 
+usage:
+
+```js
+const source = values([0, 1, 2, 3])
+const double = map(x => x * 2)
+
+log(double(source))
+```
+
 ---
 
-## pull stream errors
+### real pull streams
+
+```
+const pull = require('pull-stream')
+
+pull(
+  pull.values([0, 1, 2, 3]),
+  pull.map(x => x * 2),
+  pull.log()
+)
+```
+
+???
+
+- check out the ecosystem of modules at [pull-stream.github.io](https://pull-stream.github.io)
+
+---
+
+### pull stream errors
 
 with a pull stream source callback, there are four possible signals:
 
@@ -497,14 +660,11 @@ with a pull stream source callback, there are four possible signals:
 
 ---
 
-### catstack
+### story: catstack
 
 build a framework alone from scratch
 
-learnings:
-
-- choose your battles
-- one person team is anti-pattern
+TODO catstack picture
 
 ???
 
@@ -512,14 +672,90 @@ reinvent all the wheels!
 
 ---
 
+### reinventing wheels
+
+for fun and learning
+
+???
+
+pros
+
+- no better way to learn how systems work than by building them from scratch
+- own your dependencies, don't consume them for granted
+- provide consistent flavoring across subsystems
+
+cons
+
+- easy to become isolated
+  - if you aren't enough to become popular, you're alone
+- spreads you thin
+  - hard to work on what you want, because you have to fix something else
+- easy to rabbit hole
+- probably miss the long tail: i18n, accessibility, tests
+- always doing maintenance
+
+---
+
 ### patch ecosystem
 
+TODO patchwork logo
+
 build an app with others, bring-your-own framework modules
+
+???
 
 learnings:
 
 - do what you think #SomebodyShould do
 - collaborate with active listening and empathy
+
+---
+
+### somebody should...
+
+> if you see something that needs doing, it's your job to do
+
+???
+
+- mad science: find something worth doing, do it, publish, repeat
+
+---
+
+## conclusion
+
+---
+
+### so what
+
+everyone has opinions.
+
+this one is mine. :3
+
+???
+
+takaways
+
+- izs pants post: https://groups.google.com/forum/#!msg/nodejs/MWaivVTirPY/0pnRjKsggkIJ
+  - everyone has opinions, be aware of yours' and others'
+  - when you come over to someone's house, be polite and respect their opinions
+- don't force your opinions on others
+  - share what you're passionate about
+  - avoid persuading anyone that your way is better
+- the luddite.js way is just another opinion, not better or worse than yours
+
+### all the "standards"
+
+make up your own "standards"!
+
+you have just as much a right to make the next JavaScript standard as anyone else.
+
+---
+
+## thanks!
+
+<3
+
+https://dinosaur.is
 
 		</textarea>
 		<script>require=(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({"components/printing":[function(require,module,exports){
