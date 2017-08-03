@@ -139,9 +139,10 @@ the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement a
 ???
 
 - many Luddites were skilled machine operators in the textile industry
-- they attacked centralized factories who used automated machines operated by unskilled labor
 - they wanted machines to make high-quality goods, run by workers who had gone through an apprenticeship and got paid decent wages
+- they attacked centralized factories who used automated machines operated by unskilled labor
 - they used fictious characters to make their story ring
+  - see Ned Ludd, the made-up leader
 
 ---
 
@@ -166,6 +167,8 @@ the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement a
 what if i told you...
 
 that anyone can create a _standard_?
+
+<img src="./morpheus-cat.png" height="500" class="center" />
 
 ???
 
@@ -241,14 +244,14 @@ that you only needed _plain functions and objects_?
 
 ---
 
-## sync function syntax
+## just a function
 
 ```js
-function fn (...args) { return value }
+function fn (options) { return value }
 ```
 
 ```js
-const fn = (...args) => value
+const fn = (...args) => ({ [key]: value })
 ```
 
 ---
@@ -276,9 +279,7 @@ try {
 
 ---
 
-## es module
-
-also known as `import` and `export`
+## es modules
 
 ```js
 import thing from 'module'
@@ -307,9 +308,9 @@ export const thing = thingy
 
 ---
 
-## vs. node modules
+## or node modules
 
-also known as `require` and `module.exports =`
+also known as "CommonJS"
 
 ```js
 const thing = require('module')
@@ -339,15 +340,17 @@ module.exports = { thing: thingy }
 ## jsx
 
 ```js
-const React = require('react')
+import React from 'react'
 
-export default function Table ({ table }) {
+export default Table
+
+function Table ({ table }) {
   return <table className='table'>
     {table.map(row => {
       <tr className='row'>
         {row.map(item => {
           <td className='item'>{item}</td>
-        })}
+        })
       </tr>
     })
   </table>
@@ -364,7 +367,7 @@ export default function Table ({ table }) {
 
 ---
 
-## vs: hyperscript
+## or hyperscript
 
 ```js
 const h = require('react-hyperscript')
@@ -386,15 +389,13 @@ function Table ({ rows ) {
 
 ---
 
-## vs: hyperx
+## or hyperx
 
 ```js
 const hyperx = require('hyperx')
 const React = require('react')
 const html = hyperx(React.createElement)
-```
 
-```js
 module.exports = Table
 
 function Table ({ rows ) {
@@ -427,6 +428,7 @@ const promise = new Promise((resolve, reject) => {
   // oh no!
   reject(error)
 }
+```
 
 ???
 
@@ -444,7 +446,7 @@ function fetchCats ({ cats }) {
 
 ## continuable
 
-a "continuable" is a function that takes a single argument, a node-style error-first callback.
+a "continuable" is a function that takes a single argument, a node-style error-first callback
 
 ```js
 const continuable = (cb) => {
@@ -496,7 +498,19 @@ with a node-style error-first callback, there are three possible signals:
 
 ---
 
-## pull stream
+## pull streams
+
+async streams using only functions!
+
+```js
+pull(source(), through(), sink())
+```
+
+- composable partial pipelines
+- unbuffered by default
+- pipeline error propogation
+- source and sink back-pressure
+
 
 ???
 
@@ -505,6 +519,16 @@ with a node-style error-first callback, there are three possible signals:
 - [pull streams intro](http://dominictarr.com/post/149248845122/pull-streams-pull-streams-are-a-very-simple)
 - [pull stream](https://pull-stream.github.io/)
 - [pull stream workshop](https://github.com/pull-stream/pull-stream-workshop)
+
+compare with
+
+- node streams:
+  - https://nodejs.org/api/stream.html
+  - https://github.com/substack/stream-handbook
+  - https://github.com/workshopper/stream-adventure
+- wg-stream
+  - https://streams.spec.whatwg.org/
+  - https://github.com/whatwg/streams
 
 ---
 
@@ -656,25 +680,89 @@ with a pull stream source callback, there are four possible signals:
 
 ---
 
+## luddite.js benefits
+
+---
+
+### better performance
+
+software performance is less about gaining muscle, more about losing weight
+
+---
+
+### easier to describe
+
+specification is a function signature, not a complex state machine
+
+---
+
+### easier to understand
+
+less "snippet-driven development"
+
+more learnable tools focused on power users
+
+???
+
+- is probably a contentious opinion:
+  - yes promises are more "intuitive" than callbacks, a beginner can start using with less learning, training, or practice
+- i take the Douglas Engelbart approach to developer experience
+  - technology should augment human intellect, which means it should be a learnable tool focused on power users
+    - priority is not ease of use but powerful human computer expression
+    - "You don’t need any special training to operate a tricycle, and that’s fine if you’re just going to go around the block. If you’re trying to go up a hill or go a long distance, you want a real bike. The kind with gears and brakes– the kind that takes time to learn how to steer and balance on."
+    - how many hours do we spend writing complex code, why should we keep using the training-wheel abstractions best suited for unexperienced newbies?
+  - https://alistapart.com/column/douglas-engelbart
+  - http://www.dougengelbart.org/pubs/augment-3906.html
+  - http://99percentinvisible.org/episode/of-mice-and-men/
+
+---
+
 ## stories
 
 ---
 
 ### story: catstack
 
-build a framework alone from scratch
+build a framework from scratch, alone
 
-TODO catstack picture
+<img src="./catstack.jpg" height="450" class="center" />
 
 ???
 
 reinvent all the wheels!
 
+https://github.com/root-systems/catstack
+
+- ui views
+  - hyps
+  - hyper-fela
+- ui state
+  - inu-engine
+  - inu
+  - inu-log
+  - inu-router
+- http handlers
+  - http-compose
+  - http-sender
+  - http-routes
+- services
+  - vas
+  - vas-http
+- modules
+  - depject
+  - depnest
+  - depject-priority
+- framework
+  - module system
+  - command-line tasks
+
 ---
 
-### reinventing wheels
+### learning:
 
-for fun and learning
+yay, reinventing wheels for fun and learning
+
+boo, the world on your shoulders
 
 ???
 
@@ -696,27 +784,44 @@ cons
 
 ---
 
-### patch ecosystem
+### revised: dogstack
 
-TODO patchwork logo
+choose your battles
 
-build an app with others, bring-your-own framework modules
+<img src="./dogstack.jpg" height="450" class="center" />
 
 ???
 
-learnings:
-
-- do what you think #SomebodyShould do
-- collaborate with active listening and empathy
+http://dogstack.js.org/
 
 ---
 
-### somebody should...
+### story: patch ecosystem
+
+bring-your-own-framework potluck
+
+<img src="./patchwork.png" height="400" class="center" />
+
+???
+
+build an app with others, bring-your-own framework
+
+references:
+
+- https://github.com/ssbc/patchcore
+- https://github.com/ssbc/patchwork
+- https://github.com/ssbc/patchbay
+- https://github.com/ssbc/patchlite
+
+---
+
+### learning: somebody should...
 
 > if you see something that needs doing, it's your job to do
 
 ???
 
+- collaborate with active listening and empathy
 - mad science: find something worth doing, do it, publish, repeat
 
 ---
