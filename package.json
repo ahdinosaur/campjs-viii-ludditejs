@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "present": "ecstatic .",
-    "build": "markdown-to-slides -t 'Luddite.js' README.md -o index.html -s index.css -j index.js -i",
+    "build": "markdown-to-slides -t 'Luddite.js' README.md -o index.html -s index.css -j index.js",
     "watch": "npm run build -- -w",
     "livereload": "wtch -d . -e html,css,png,gif,jpg | garnish --level debug",
     "static": "ecstatic-lr .",

@@ -474,3 +474,25 @@ like framing
 
 - acknowledge that pull streams could be its own talk
   - link to actual talks
+
+---
+
+- one slide has different header level text size
+- work on transitions, hard to tell what each slide is saying
+  - decentralized vs centralized
+    - color code
+    - altenate
+  - section title slide for introducing concept ("eventual value", "dom elements", "reactive value", "values over time")
+  - explain the pattern you are going to do in the talk ("sign post"), hey i'm going to 
+  - "i might be a fanboy, but here's more dominic tarr"
+  - luddite.js benefits -> why should you be a JavaScript luddite?
+  - douglas englebart face on it's own slide
+- catstack cringed
+- ending slides weren't decisive, waffling, uncomfortable
+- standards are just opinions
+- could have stopped after "it's not about being right, it's about being successful"
+  - add "as my Mom always says"
+- shameless plug for Patchwork, get on Patchwork, with link
+  - add a screenshot
+- add contact details to opening and closing slides
+- twitter handle in footer of every slide

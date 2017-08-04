@@ -1,10 +1,23 @@
+layout: true
+
+<footer>dinosaur.is</footer>
+
+---
+class: center
+
 # luddite.js
+
+<img src="./white-rabbit.jpg" />
+
+<!-- image credit to http://www.rabbitholekc.org/ -->
+
+???
 
 ---
 
 ## hey [CampJS](http://campjs.com)
 
-i'm [Mikey (@ahdinosaur)](http://dinosaur.is) from [Enspiral](http://enspiral.com)
+i'm [Mikey](http://dinosaur.is) from [Enspiral](https://enspiral.com) & [Root Systems](https://www.rootsystems.nz)
 
 <div class="row">
   <a href="http://dinosaur.is.com">
@@ -13,37 +26,43 @@ i'm [Mikey (@ahdinosaur)](http://dinosaur.is) from [Enspiral](http://enspiral.co
   <a href="http://enspiral.com">
     <img alt="Enspiral logo" src="./enspiral.png" width="200" />
   </a>
+  <a href="http://dinosaur.is">
+    <img alt="Root Systems logo" src="./root-systems.jpg" width="200" />
+  </a>
 </div>
 
-slides are available at <http://dinosaur.is/campjs-viii-ludditejs>.
+slides are available at:
+
+<http://dinosaur.is/campjs-viii-ludditejs>
 
 ???
 
 - second time presenting at a conference.
+- i'll try to be upfront and honest, apologies in advance if i disguise any opinions as facts
 - i might say negative things about some JavaScript patterns, but i use those patterns too
-  - yes i'm bitter about some things, i'll try to be honest
-- everyone in the JavaScript community is doing a wonderful job
-- apologies in advance if i disguise any opinions as facts
+- in general everyone in the JavaScript community is doing a wonderful job, i appreciate your work
 
----
+### let's adventure
 
-## what?
+#### to the silly wonderland of luddite.js
 
-luddite.js
+<img src="./rabbit-hole.jpg" height='400' class="center" />
+
+<!-- image credit to Mary Blair at Disney -->
 
 ???
 
-so...
+an ambiguous utopia
+
 
 ---
+class: info
 
 ## Luddite?
 
 the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement against _automated centralized technology_.
 
-<div style='display: flex; justify-content: center'>
-  <img src="./luddite.jpg" height='400' />
-</div>
+<img src="./luddite.jpg" height='300' class="center" />
 
 ???
 
@@ -51,41 +70,48 @@ the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement a
 - they wanted machines to make high-quality goods, run by workers who had gone through an apprenticeship and got paid decent wages
 - they attacked centralized factories who used automated machines operated by unskilled labor
 - they used fictious characters to make their story ring
-  - see Ned Ludd, the made-up leader
+  - see Ned Ludd, the made-up leader, who lived in Sherwood Forest
 
 ---
+class: info
 
 ## luddite.js?
 
 **luddite.js** is a (made-up) meme for _simple decentralized JavaScript_.
 
 - decentralized userland ecosystems
-  - not centralized core committees
 - simple patterns based on function signatures
-  - not trendy libraries that lock you in
 
 ???
 
+- not centralized core committees
+- not trendy libraries that lock you in
 - gonna lead you on a journey through the luddite way to do things
 - a study of functional JavaScript patterns that have evolved in userland
 
 ---
+class: center, info
 
-## decent userland
+## decentralized userland ecosystems
+
+---
+class: info
 
 what if i told you...
 
-that anyone can create a _standard_?
+<img src="./morpheus-cat.png" height="400" />
 
-<img src="./morpheus-cat.png" height="500" class="center" />
+that anyone can create a _standard_?
 
 ???
 
+- not everyone needs to agree with you
 - no corporate sponsorship necessary
 
 ---
+class: info
 
-## what is a standard?
+### what is a standard?
 
 anything that enough people use is a "standard"
 
@@ -106,8 +132,9 @@ npm install --global standard
   - anything "best practice"
 
 ---
+class: info
 
-## what is a _luddite.js_ standard?
+### what is a _luddite.js_ standard?
 
 a standard based on a function signature
 
@@ -119,15 +146,15 @@ const reducer = (state, action) => nextState
 
 ???
 
-- standard function signature
 - what other standards based on function signatures can you think of?
   - express / connect: (req, res, next)
 
 ---
+class: info
 
-## why is this important?
+### why is this important?
 
-- easy to use and test
+- easy to test
 - accessible for anyone to participate
 - no module lock-in
 
@@ -138,12 +165,18 @@ const reducer = (state, action) => nextState
 - you can swap libraries that are compatible with the "function specification"
 
 ---
+class: center, info
 
-## simple functional
+## simple patterns based on function signatures
+
+---
+class: info
 
 what if i told you...
 
-that you only needed _plain functions and objects_?
+<img src="./morpheus-cat.png" height="400" />
+
+that you only needed _functions and objects_?
 
 ???
 
@@ -152,8 +185,9 @@ that you only needed _plain functions and objects_?
 - how can we apply this pattern to the full stack?
 
 ---
+class: success
 
-## just a function
+### just a function
 
 ```js
 function fn (options) { return value }
@@ -164,8 +198,9 @@ const fn = (...args) => ({ [key]: value })
 ```
 
 ---
+class: info
 
-## sync function signals
+### sync function signals
 
 with a sync function, there are two possible signals:
 
@@ -187,8 +222,14 @@ try {
 ```
 
 ---
+class: center, info
 
-## es modules
+## modules
+
+---
+class: danger
+
+### es modules
 
 ```js
 import thing from 'module'
@@ -216,8 +257,9 @@ export const thing = thingy
   - yes, i'm bitter about this, i've lost many hours debugging broken code, only to realize the module author published a patch version that broke the CommonJS exports
 
 ---
+class: success
 
-## or node modules
+### node modules
 
 also known as "CommonJS"
 
@@ -243,10 +285,15 @@ module.exports = { thing: thingy }
   - capture result of `module.exports` variable
 - when i started using Node.js from Python, `require`-as-a-function is what excited me the most
   - so yes, i'm somewhat bitter that now JavaScript is adopting the same syntax as Python
+---
+class: center, info
+
+## dom elements
 
 ---
+class: danger
 
-## jsx
+### jsx
 
 ```js
 import React from 'react'
@@ -275,8 +322,9 @@ function Table ({ table }) {
   - can only use expressions, not statements
 
 ---
+class: success
 
-## or hyperscript
+### hyperscript
 
 ```js
 const h = require('react-hyperscript')
@@ -297,8 +345,9 @@ function Table ({ rows ) {
 - `React.createElement` is basically a strict hyperscript without the class/id sugar
 
 ---
+class: success
 
-## or hyperx
+### hyperx
 
 ```js
 const hyperx = require('hyperx')
@@ -325,10 +374,14 @@ function Table ({ rows ) {
 - similar to JSX, but uses existing language features: tagged template string
 
 ---
+class: center, info
 
-## promise
+## eventual value
 
-a "promise" is an eventual value
+---
+class: danger
+
+### promise
 
 ```js
 const promise = new Promise((resolve, reject) => {
@@ -337,6 +390,12 @@ const promise = new Promise((resolve, reject) => {
   // oh no!
   reject(error)
 }
+```
+
+```js
+promise
+  .then(value => console.log(value))
+  .catch(err => console.error(value))
 ```
 
 ???
@@ -352,8 +411,9 @@ function fetchCats ({ cats }) {
 ```
 
 ---
+class: success
 
-## continuable
+### continuable
 
 a "continuable" is a function that takes a single argument, a node-style error-first callback
 
@@ -390,8 +450,9 @@ function fetchCats ({ cats }) {
 ```
 
 ---
+class: info
 
-## async errors
+### async errors
 
 with a node-style error-first callback, there are three possible signals:
 
@@ -406,8 +467,73 @@ with a node-style error-first callback, there are three possible signals:
   - yes, i'm bitter about this, i've lost many hours trying to figure out where my errors went
 
 ---
+class: center, info
 
-## pull streams
+## reactive values
+
+---
+class: danger
+
+### es observables
+
+https://tc39.github.io/proposal-observable/
+
+???
+
+too much detail to explain here
+
+- https://github.com/tc39/proposal-observable
+
+---
+class: success
+
+### observ-ables
+
+reactive values using only functions!
+
+> - `thing()` gets the value
+> - `thing.set(...)` sets the value
+> - `thing(function (value) { ... })` listens to the value.
+
+???
+
+- [`observ`](https://github.com/Raynos/observ)
+- [`observable`](https://github.com/dominictarr/observable)
+- [`push-stream`](https://github.com/ahdinosaur/push-stream)
+- [`mutant`](https://github.com/mmckegg/mutant)
+
+---
+class: center, info
+
+## values over time
+
+---
+class: danger
+
+### node streams
+
+https://nodejs.org/api/stream.html
+
+???
+
+- https://github.com/substack/stream-handbook
+- https://github.com/workshopper/stream-adventure
+
+---
+class: danger
+
+### whatwg streams
+
+https://streams.spec.whatwg.org/
+
+???
+
+- https://github.com/whatwg/streams
+
+---
+class: success
+
+### pull streams
 
 async streams using only functions!
 
@@ -420,8 +546,9 @@ pull(source(), through(), sink())
 - pipeline error propogation
 - source and sink back-pressure
 
-
 ???
+
+pull streams could be its own talk, going to be a quick intro
 
 - [history of streams](http://dominictarr.com/post/145135293917/history-of-streams)
 - [pull stream examples](https://github.com/dominictarr/pull-stream-examples)
@@ -429,21 +556,24 @@ pull(source(), through(), sink())
 - [pull stream](https://pull-stream.github.io/)
 - [pull stream workshop](https://github.com/pull-stream/pull-stream-workshop)
 
-compare with
+---
+class: success
 
-- node streams:
-  - https://nodejs.org/api/stream.html
-  - https://github.com/substack/stream-handbook
-  - https://github.com/workshopper/stream-adventure
-- wg-stream
-  - https://streams.spec.whatwg.org/
-  - https://github.com/whatwg/streams
+##### source usage
+
+```js
+const source = values([0, 1, 2, 3])
+
+source(null, (err, value) {
+  console.log('first value:', value)
+})
+// first value: 0
+```
 
 ---
+class: success
 
-### source
-
-example:
+##### source example
 
 ```js
 function values (array) {
@@ -459,17 +589,6 @@ function values (array) {
 }
 ```
 
-usage:
-
-```js
-const source = values([0, 1, 2, 3])
-
-source(null, (err, value) {
-  console.log('first value:', value)
-})
-// first value: 0
-```
-
 ???
 
 - look ma, just functions!
@@ -477,10 +596,24 @@ source(null, (err, value) {
   - much faster this way, no reason to delay til next tick
 
 ---
+class: success
 
-### sink
+#### sink usage
 
-example:
+```js
+const source = values([0, 1, 2, 3])
+
+log(source)
+// 0
+// 1
+// 2
+// 3
+```
+
+---
+class: success
+
+#### sink example
 
 ```js
 function log (read) {
@@ -491,18 +624,6 @@ function log (read) {
     read(null, next)
   })
 }
-```
-
-usage:
-
-```js
-const source = values([0, 1, 2, 3])
-
-log(source)
-// 0
-// 1
-// 2
-// 3
 ```
 
 ???
@@ -523,10 +644,21 @@ function log (read) {
 ```
 
 ---
+class: success
 
-### through
+#### through usage
 
-example:
+```js
+const source = values([0, 1, 2, 3])
+const double = map(x => x * 2)
+
+log(double(source))
+```
+
+---
+class: success
+
+#### through example
 
 ```js
 function map (mapper) {
@@ -545,36 +677,39 @@ function map (mapper) {
 }
 ```
 
-usage:
-
-```js
-const source = values([0, 1, 2, 3])
-const double = map(x => x * 2)
-
-log(double(source))
-```
-
 ---
+class: success
 
-### real pull streams
+#### wild pull streams
+
+ecosystem of modules: [pull-stream.github.io](https://pull-stream.github.io)
 
 ```
-const pull = require('pull-stream')
-
+// parse a csv file
 pull(
-  pull.values([0, 1, 2, 3]),
-  pull.map(x => x * 2),
-  pull.log()
+  File(filename),
+  CSV(),
+  pull.drain(console.log)
 )
+
+function CSV () {
+  return pull(
+    Split(), // defaults to '\n'
+    pull.map(function (line) {
+      return line.split(',')
+    })
+  )
+}
 ```
 
 ???
 
-- check out the ecosystem of modules at [pull-stream.github.io](https://pull-stream.github.io)
+obviously you don't want to re-implement simple streams from scratch all the time
 
 ---
+class: info
 
-### pull stream errors
+#### pull stream errors
 
 with a pull stream source callback, there are four possible signals:
 
@@ -588,22 +723,36 @@ with a pull stream source callback, there are four possible signals:
 - both the source and sink can signal back-pressure ("hey i'm busy") by not calling the respective callback
 
 ---
+class: center, info
 
-## luddite.js benefits
+## why should you be a JavaScript luddite?
 
 ---
+class: success
 
 ### better performance
 
 software performance is less about gaining muscle, more about losing weight
 
+???
+
+- code runs faster when it does less
+- if you don't use fancy syntax (jsx, etc), you don't need fancy build steps
+
 ---
+class: success
 
 ### easier to describe
 
 specification is a function signature, not a complex state machine
 
+???
+
+- clear inputs and outputs
+- no hidden state to manage
+
 ---
+class: success
 
 ### easier to understand
 
@@ -624,23 +773,34 @@ more learnable tools focused on power users
   - http://www.dougengelbart.org/pubs/augment-3906.html
   - http://99percentinvisible.org/episode/of-mice-and-men/
 
+
+  His system, called NLS, showed actual instances of, or precursors to, hypertext, shared screen collaboration, multiple windows, on-screen video teleconferencing, and the mouse as an input device.
+
+  He intended to boost collective intelligence and enable knowledge workers to think in powerful new ways, to collectively solve urgent global problems.
+
+> The pendulum has swung about as far as it can toward the consumerization of computing technology, in which everything should be immediately intuitive and nothing should require learning, training, or practice. Engelbart’s vision was on the opposite end of that pendulum swing—he believed that the power of these tools came with inherent complexity.
+
 ---
+class: center, info
 
 ## stories
 
 ---
+class: warning
 
 ### story: catstack
 
 build a framework from scratch, alone
 
-<img src="./catstack.jpg" height="450" class="center" />
+<img src="./catstack.jpg" height="350" class="center" />
 
 ???
 
-reinvent all the wheels!
+reinvent every wheel possible!
 
 https://github.com/root-systems/catstack
+
+i did it, but it was unsustainable, unable to transfer context to team
 
 - ui views
   - hyps
@@ -666,6 +826,7 @@ https://github.com/root-systems/catstack
   - command-line tasks
 
 ---
+class: warning
 
 ### learning:
 
@@ -680,40 +841,47 @@ pros
 - no better way to learn how systems work than by building them from scratch
 - own your dependencies, don't consume them for granted
 - provide consistent flavoring across subsystems
+- marginally better than other libraries
 
 cons
 
 - easy to become isolated
   - if you aren't enough to become popular, you're alone
 - spreads you thin
-  - hard to work on what you want, because you have to fix something else
+  - hard to work on what you can do best, because you have to spend limited resources on your marginally better stack
 - easy to rabbit hole
 - probably miss the long tail: i18n, accessibility, tests
 - always doing maintenance
 
 ---
+class: info
 
 ### revised: dogstack
 
 choose your battles
 
-<img src="./dogstack.jpg" height="450" class="center" />
+<img src="./dogstack.jpg" height="350" class="center" />
 
 ???
+
+focus on what you do best
+
+delegates parts where you are only marginally better
 
 http://dogstack.js.org/
 
 ---
+class: success
 
 ### story: patch ecosystem
 
-bring-your-own-framework potluck
+bring-your-own-JavaScript potluck
 
-<img src="./patchwork.png" height="400" class="center" />
+<img src="./patchwork.png" height="350" class="center" />
 
 ???
 
-build an app with others, bring-your-own framework
+build an app with others, bring your own JavaScript opinions
 
 references:
 
@@ -723,21 +891,41 @@ references:
 - https://github.com/ssbc/patchlite
 
 ---
+class: success, center
 
-### learning: somebody should...
+#### offline social media
 
-> if you see something that needs doing, it's your job to do
+<img src="./patchwork-screenshot.jpg" height="500" class="center" />
+
+---
+class: success, center
+
+#### git projects
+
+<img src="./git-ssb-screenshot.png" height="450" class="center" />
+
+---
+class: success
+
+### learning: mad science works!
+
+follow your passion
+
+find others who share your passion
 
 ???
 
-- collaborate with active listening and empathy
+- somebody should: if you see something that needs doing, it's your job to do
+- find ways to collaborate with active listening and empathy
 - mad science: find something worth doing, do it, publish, repeat
 
 ---
+class: center, info
 
 ## conclusion
 
 ---
+class: info
 
 ### so what
 
@@ -747,8 +935,11 @@ this one is mine. :3
 
 ???
 
-takaways
+as my Mom always says:
 
+> it's not about being right, it's about being successful
+
+takaways
 - izs pants post: https://groups.google.com/forum/#!msg/nodejs/MWaivVTirPY/0pnRjKsggkIJ
   - everyone has opinions, be aware of yours' and others'
   - when you come over to someone's house, be polite and respect their opinions
@@ -757,16 +948,65 @@ takaways
   - avoid persuading anyone that your way is better
 - the luddite.js way is just another opinion, not better or worse than yours
 
+## aids
+
+- [eating your own dog food](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)
+- [mad science method](https://github.com/ahdinosaur/mad-science-handbook/blob/master/collaboration.md#the-mad-science-cycle)
+- [do-ocracy](https://communitywiki.org/wiki/DoOcracy)
+- marathon: keep a slow & steady pace one step at a time
+- if you see a job that needs doing, it's your job to do (do-ocrarcy)
+- too much sugar is bad for your health (simple interfaces)
+
+## blocks
+
+- cave method: try to design or implement the _perfect_ system before sharing it
+- [design by committee](https://en.wikipedia.org/wiki/Design_by_committee)
+- sprint: hype, mania, and burn-out
+- [waterfall design](https://en.wikipedia.org/wiki/Waterfall_model)
+
+---
+class: info
+
 ### all the "standards"
 
 make up your own "standards"!
 
 you have just as much a right to make the next JavaScript standard as anyone else.
 
+???
+
+at the end of the day, standards are just somebody's opinion.
+
 ---
+class: info
+
+## questions?
+
+---
+class: success
 
 ## thanks!
 
-<3
+i appreciate the gift of your attention. ♥
 
-https://dinosaur.is
+<img src="./follow_your_dreams.png" height="300" class="center" />
+
+<!-- image credit to @substack -->
+
+???
+
+## references
+
+- [es2040](https://github.com/ahdinosaur/es2040)
+- [Art of Node](https://github.com/maxogden/art-of-node)
+- [Art of I/O](http://ioschool.is/art-of-io/sessions/0/?notes=true)
+- [Tiny Guide to Non Fancy Node](https://github.com/yoshuawuyts/tiny-guide-to-non-fancy-node)
+
+## luddite.js apps
+
+- https://webtorrent.io/
+- http://standardjs.com/
+- https://peermaps.github.io/
+- http://loopjs.com/
+- https://scuttlebutt.nz/
+- https://choo.io/

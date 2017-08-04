@@ -78,3 +78,29 @@ code {
 .center {
   margin: 0 auto;
 }
+
+footer {
+  position: absolute;
+  font-size: 1.4rem;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  color: #808080;
+  text-align: center;
+}
+
+.success {
+  border-top: solid 10px #449d44;
+}
+
+.info {
+  border-top: solid 10px #5BC0DE;
+}
+
+.warning {
+  border-top: solid 10px #F0AD4E;
+}
+
+.danger {
+  border-top: solid 10px #D9534F;
+}
