@@ -14,6 +14,7 @@ class: center
 ???
 
 ---
+class: center
 
 ## hey [CampJS](http://campjs.com)
 
@@ -42,11 +43,14 @@ slides are available at:
 - i might say negative things about some JavaScript patterns, but i use those patterns too
 - in general everyone in the JavaScript community is doing a wonderful job, i appreciate your work
 
+---
+class: center
+
 ### let's adventure
 
 #### to the silly wonderland of luddite.js
 
-<img src="./rabbit-hole.jpg" height='400' class="center" />
+<img src="./rabbit-hole.jpg" height='380' class="center" />
 
 <!-- image credit to Mary Blair at Disney -->
 
@@ -764,21 +768,48 @@ more learnable tools focused on power users
 
 - is probably a contentious opinion:
   - yes promises are more "intuitive" than callbacks, a beginner can start using with less learning, training, or practice
-- i take the Douglas Engelbart approach to developer experience
-  - technology should augment human intellect, which means it should be a learnable tool focused on power users
-    - priority is not ease of use but powerful human computer expression
-    - "You don’t need any special training to operate a tricycle, and that’s fine if you’re just going to go around the block. If you’re trying to go up a hill or go a long distance, you want a real bike. The kind with gears and brakes– the kind that takes time to learn how to steer and balance on."
-    - how many hours do we spend writing complex code, why should we keep using the training-wheel abstractions best suited for unexperienced newbies?
-  - https://alistapart.com/column/douglas-engelbart
-  - http://www.dougengelbart.org/pubs/augment-3906.html
-  - http://99percentinvisible.org/episode/of-mice-and-men/
-
 
   His system, called NLS, showed actual instances of, or precursors to, hypertext, shared screen collaboration, multiple windows, on-screen video teleconferencing, and the mouse as an input device.
 
   He intended to boost collective intelligence and enable knowledge workers to think in powerful new ways, to collectively solve urgent global problems.
 
 > The pendulum has swung about as far as it can toward the consumerization of computing technology, in which everything should be immediately intuitive and nothing should require learning, training, or practice. Engelbart’s vision was on the opposite end of that pendulum swing—he believed that the power of these tools came with inherent complexity.
+
+---
+class: info
+
+#### augment human intellect
+
+learnable tools focused on power users
+
+<img src="./engelbart.jpg" height="350" class="center" />
+
+???
+
+- i take the Douglas Engelbart approach to developer experience
+  - technology should augment human intellect, which means it should be a learnable tool focused on power users
+  - priority is not ease of use but powerful human computer expression
+
+references:
+
+- https://alistapart.com/column/douglas-engelbart
+- http://www.dougengelbart.org/pubs/augment-3906.html
+- http://99percentinvisible.org/episode/of-mice-and-men/
+
+---
+class: info
+
+#### remove the training wheels!
+
+<img src="./training-wheels.jpg" height="425" class="center" />
+
+
+???
+
+"You don’t need any special training to operate a tricycle, and that’s fine if you’re just going to go around the block. If you’re trying to go up a hill or go a long distance, you want a real bike. The kind with gears and brakes– the kind that takes time to learn how to steer and balance on."
+
+how many hours do we spend writing complex code, why should we keep using the training-wheel abstractions best suited for unexperienced newbies?
+
 
 ---
 class: center, info
