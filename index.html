@@ -450,23 +450,74 @@ class: danger
 
 ```js
 import React from 'react'
+import classNames from 'classnames'
 
-export default function ({ rows }) {
-  return (
-    <Table>
-      {rows.map(row =>
-        <Row>
-          {row.map(item =>
-            <Item>
-              {item}
-            </Item>
-          )}
-        </Row>
-      )}
-    </Table>
-  )
+export default Todos
+
+const Todos = ({ items }) => (
+  <List>{items.map(item => (
+    <Item item={item} />
+  ))}</List>
+)
+
+const List = ({ children }) => (
+  <div className='list'>{children}</div>
+)
+
+const Item = ({ item: { isActive, text } }) => {
+  const className = classNames({
+    item: true,
+    active: isActive
+  })
+  return <div className={className}>{text}</div>
 }
+```
 
+???
+
+- made by Facebook to make React easier to use
+- looks friendly on the surface, but underneath has non-obvious edge cases
+  - hides that JSX is actually `React.createElement` function calls
+  - "why can't i use `if () { first } else { second }`?
+  - can only use expressions, not statements
+
+---
+
+class: success
+
+### hyperscript
+
+```js
+const h = require('react-hyperscript')
+const classNames = require('classnames')
+
+module.exports = Todos
+
+const Todos = ({ items }) => (
+  h(List, items.map(item =>
+    h(Item, { item })
+  ))
+)
+
+const List = ({ children }) => (
+  h('div', { className: 'list' }, children)
+)
+
+const Item = ({ item: { isActive, text } }) => {
+  const className = classNames({
+    item: true,
+    active: isActive
+  })
+  return h('div', { className }, text)
+)
+```
+
+???
+
+- syntax can be confusing at first
+- `React.createElement` is basically a strict hyperscript
+
+```js
 function Table ({ children }) {
   return <table className='table'>{children}</table>
 }
@@ -481,45 +532,6 @@ function Item ({ children }) {
 ```
 
 ???
-
-- made by Facebook to make React easier to use
-- looks friendly on the surface, but underneath has non-obvious edge cases
-  - hides that React is actually `React.createElement` function calls
-  - "why can't i use `if () { first } else { second }`?
-  - can only use expressions, not statements
-
----
-class: success
-
-### hyperscript
-
-```js
-const h = require('react-hyperscript')
-
-module.exports = Table
-
-function Table ({ rows ) {
-  return h('table', {
-    className: 'table'
-  }, rows.map(row => {
-    h('tr', {
-      className: 'row'
-    }, row.map(item => {
-      h('td', {
-        className: 'item'
-      }, Item(item))
-    })
-  })
-}
-```
-
-???
-
-- `React.createElement` is basically a strict hyperscript
-- syntax can be confusing at first
-
----
-class: success
 
 ### hyperx
 
@@ -546,6 +558,36 @@ function Table ({ rows ) {
 ???
 
 - similar to JSX, but uses existing language features: tagged template string
+
+---
+class: success
+
+### React.createElement
+
+```js
+const h = require('react').createElement
+const classNames = require('classnames')
+
+module.exports = Todos
+
+const Todos = ({ items }) => (
+  h(List, {}, items.map(item =>
+    h(Item, { item })
+  ))
+)
+
+const List = ({ children }) => (
+  h('div', { className: 'list' }, children)
+)
+
+const Item = ({ item: { isActive, text } }) => {
+  const className = classNames({
+    item: true,
+    active: isActive
+  })
+  return h('div', { className }, text)
+)
+```
 
 ---
 class: center, info

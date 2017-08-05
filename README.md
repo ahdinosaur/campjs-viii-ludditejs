@@ -333,21 +333,26 @@ class: danger
 
 ```js
 import React from 'react'
+import classNames from 'classnames'
 
-export default function ({ rows }) {
-  return (
-    <Table>
-      {rows.map(row =>
-        <Row>
-          {row.map(item =>
-            <Item>
-              {item}
-            </Item>
-          )}
-        </Row>
-      )}
-    </Table>
-  )
+export default Todos
+
+const Todos = ({ items }) => (
+  <List>{items.map(item => (
+    <Item item={item} />
+  ))}</List>
+)
+
+const List = ({ children }) => (
+  <div className='list'>{children}</div>
+)
+
+const Item = ({ item: { isActive, text } }) => {
+  const className = classNames({
+    item: true,
+    active: isActive
+  })
+  return <div className={className}>{text}</div>
 }
 ```
 
@@ -355,96 +360,82 @@ export default function ({ rows }) {
 
 - made by Facebook to make React easier to use
 - looks friendly on the surface, but underneath has non-obvious edge cases
-  - hides that React is actually `React.createElement` function calls
+  - hides that JSX is actually `React.createElement` function calls
   - "why can't i use `if () { first } else { second }`?
   - can only use expressions, not statements
 
-```js
-function Table ({ children }) {
-  return <table className='table'>{children}</table>
-}
-
-function Row ({ children }) {
-  return <tr className='row'>{children}</tr>
-}
-
-function Item ({ children }) {
-  return <td className='item'>{children}</td>
-})
-```
 ---
+
 class: success
 
 ### hyperscript
 
 ```js
 const h = require('react-hyperscript')
+const classNames = require('classnames')
 
-module.exports = Table
+module.exports = Todos
 
-function Table ({ rows ) {
-  return h('table', {
-    className: 'table'
-  }, rows.map(row => {
-    h('tr', {
-      className: 'row'
-    }, row.map(item => {
-      h('td', {
-        className: 'item'
-      }, Item(item))
-    })
+const Todos = ({ items }) => (
+  h(List, items.map(item =>
+    h(Item, { item })
+  ))
+)
+
+const List = ({ children }) => (
+  h('div', { className: 'list' }, children)
+)
+
+const Item = ({ item: { isActive, text } }) => {
+  const className = classNames({
+    item: true,
+    active: isActive
   })
-}
-
+  return h('div', { className }, text)
+)
 ```
 
 ???
 
-- `React.createElement` is basically a strict hyperscript
 - syntax can be confusing at first
+- `React.createElement` is basically a strict hyperscript
 
-```js
-function Table ({ children }) {
-  return <table className='table'>{children}</table>
-}
+see also:
 
-function Row ({ children }) {
-  return <tr className='row'>{children}</tr>
-}
-
-function Item ({ children }) {
-  return <td className='item'>{children}</td>
-})
-```
+- [`hyperscript-helpers`](https://github.com/ohanhi/hyperscript-helpers)
+  - `div`, `span`, `ul`, `li`, etc functions
+- [`hyperx`](https://github.com/substack/hyperx)
+  - similar to JSX, but uses existing language features: tagged template literals
 
 ---
 class: success
 
-### hyperx
+### React.createElement
 
 ```js
-const hyperx = require('hyperx')
-const React = require('react')
-const html = hyperx(React.createElement)
+const h = require('react').createElement
+const classNames = require('classnames')
 
-module.exports = Table
+module.exports = Todos
 
-function Table ({ rows ) {
-  return html`<table class='table'>
-    ${rows.map(row => {
-      html`<tr class='row'>
-        ${row.map(item => {
-          html`<td class='item'>${item}</td>`
-        })}
-      </tr>`
-    })}
-  </table>`
-}
+const Todos = ({ items }) => (
+  h(List, {}, items.map(item =>
+    h(Item, { item })
+  ))
+)
+
+const List = ({ children }) => (
+  h('div', { className: 'list' }, children)
+)
+
+const Item = ({ item: { isActive, text } }) => {
+  const className = classNames({
+    item: true,
+    active: isActive
+  })
+  return h('div', { className }, text)
+)
 ```
-
-???
-
-- similar to JSX, but uses existing language features: tagged template string
 
 ---
 class: center, info
@@ -472,6 +463,10 @@ promise
 ```
 
 ???
+
+TODO waterfall
+
+parallel
 
 ```js
 module.exports = fetchCats
@@ -515,6 +510,9 @@ can be passed around as an "eventual value", same as promises. but without the r
 - [`continuable`](https://github.com/Raynos/continuable)
 - [`cont`](https://github.com/dominictarr/cont)
 
+TODO waterfall
+
+parallel
 
 ```js
 const request = require('request')
@@ -524,8 +522,8 @@ module.exports = fetchCats
 
 function fetchCats ({ cats }) {
   return callback => parallel(cats.map(cat => {
-    return request(cat, callback)
-  }))
+    return callback => request(cat, callback)
+  }), callback)
 })
 ```
 
