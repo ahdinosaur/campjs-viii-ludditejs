@@ -38,7 +38,7 @@ slides are available at:
 
 ???
 
-- second time presenting at a conference.
+- second time presenting at a conference
 - i want to share what i am passionate about
   - i might say negative things about some JavaScript patterns, but i use those patterns too
   - i don't want to yuck your yum
@@ -52,7 +52,7 @@ class: center, info
 
 ???
 
-- when i was writing this talk a few days ago, covered in Imposter Syndrome, i realized...
+- when i was writing this talk a few days ago, deep in Imposter Syndrome, i realized...
   - someone inspired my passion behind this talk without me realizing
 
 ---
@@ -174,6 +174,22 @@ npm install --global standard
 ---
 class: info
 
+what if i told you...
+
+<img src="./morpheus-cat.png" height="400" />
+
+that you only needed _functions and objects_?
+
+???
+
+- no fancy syntax necessary
+  - less language clutter
+- how can we apply this pattern to the full stack?
+
+
+---
+class: info
+
 ### what is a _luddite.js_ standard?
 
 a standard based on a function signature
@@ -208,21 +224,6 @@ class: info
 class: center, info
 
 ## simple patterns based on function signatures
-
----
-class: info
-
-what if i told you...
-
-<img src="./morpheus-cat.png" height="400" />
-
-that you only needed _functions and objects_?
-
-???
-
-- no fancy syntax necessary
-  - less language clutter
-- how can we apply this pattern to the full stack?
 
 ---
 class: success
@@ -419,7 +420,7 @@ const classNames = require('classnames')
 module.exports = Todos
 
 const Todos = ({ items }) => (
-  h(List, {}, items.map(item =>
+  h(List, null, items.map(item =>
     h(Item, { item })
   ))
 )
@@ -445,7 +446,7 @@ class: center, info
 ---
 class: danger
 
-### promise
+### promise spec
 
 ```js
 const promise = new Promise((resolve, reject) => {
@@ -463,6 +464,8 @@ promise
 ```
 
 ???
+
+https://tc39.github.io/ecma262/#sec-promise-objects
 
 TODO waterfall
 
@@ -569,9 +572,9 @@ class: success
 
 reactive values using only functions!
 
-> - `thing()` gets the value
-> - `thing.set(...)` sets the value
-> - `thing(function (value) { ... })` listens to the value.
+- `thing()` gets the value
+- `thing.set(value)` sets the value
+- `thing((value) => { ... })` listens to the value
 
 ???
 
@@ -584,10 +587,36 @@ reactive values using only functions!
 class: success
 
 ```js
-TODO add mutant html example
+const { h, Struct, Value, when } = require('mutant')
+
+const toggle = (state) => {
+  state.set(!state())
+}
+
+const Activity = ({ activity: { isActive, text }) => (
+  h('div', {
+    style: {
+      color: when(isActive, 'green', 'red')
+    },
+    events: {
+      click: () => toggle(isActive)
+    }
+  }, text)
+)
+
+var activity = Struct({
+  text: Value('give a talk'),
+  isActive: Value(true)
+})
+var element = Activity({ activity })
+
+document.body.appendChild(element)
 ```
 
 ???
+
+- mutant has observables for all composite data structures: arrays, sets, dictionaries, etc
+- updates in-place, no dom diff-ing!
 
 ---
 class: center, info
@@ -646,14 +675,14 @@ pull streams could be its own talk, going to be a quick intro
 ---
 class: success
 
-#### source spec
+#### source
 
 ```js
 function createSource (...args) {
   // a source function accepts
   //   - abort: a boolean whether to signal end
   //   - callback: where to send next signal
-  return source (abort, callback) => {
+  return (abort, callback) => {
     if (abort || done) callback(true)
     else callback(null, value)
   }
@@ -780,13 +809,7 @@ function createThrough (...args) {
   return (source) => {
     // but return another source!
     return (abort, callback) {
-      // if the through should abort, pass that on.
-      source(abort, (err, value) => {
-        // if the source has an error, pass that on.
-        if (err) callback(err)
-        // else transform the value
-        else callback(null, transformValue(value))
-      })
+      // ...
     }
   }
 }
@@ -1146,9 +1169,9 @@ i appreciate the gift of your attention. ♥
 
 ## luddite.js apps
 
+- https://scuttlebutt.nz/
+- http://loopjs.com/
+- https://choo.io/
 - https://webtorrent.io/
 - http://standardjs.com/
 - https://peermaps.github.io/
-- http://loopjs.com/
-- https://scuttlebutt.nz/
-- https://choo.io/

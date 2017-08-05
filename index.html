@@ -155,7 +155,7 @@ slides are available at:
 
 ???
 
-- second time presenting at a conference.
+- second time presenting at a conference
 - i want to share what i am passionate about
   - i might say negative things about some JavaScript patterns, but i use those patterns too
   - i don't want to yuck your yum
@@ -169,7 +169,7 @@ class: center, info
 
 ???
 
-- when i was writing this talk a few days ago, covered in Imposter Syndrome, i realized...
+- when i was writing this talk a few days ago, deep in Imposter Syndrome, i realized...
   - someone inspired my passion behind this talk without me realizing
 
 ---
@@ -291,6 +291,22 @@ npm install --global standard
 ---
 class: info
 
+what if i told you...
+
+<img src="./morpheus-cat.png" height="400" />
+
+that you only needed _functions and objects_?
+
+???
+
+- no fancy syntax necessary
+  - less language clutter
+- how can we apply this pattern to the full stack?
+
+
+---
+class: info
+
 ### what is a _luddite.js_ standard?
 
 a standard based on a function signature
@@ -325,21 +341,6 @@ class: info
 class: center, info
 
 ## simple patterns based on function signatures
-
----
-class: info
-
-what if i told you...
-
-<img src="./morpheus-cat.png" height="400" />
-
-that you only needed _functions and objects_?
-
-???
-
-- no fancy syntax necessary
-  - less language clutter
-- how can we apply this pattern to the full stack?
 
 ---
 class: success
@@ -517,47 +518,12 @@ const Item = ({ item: { isActive, text } }) => {
 - syntax can be confusing at first
 - `React.createElement` is basically a strict hyperscript
 
-```js
-function Table ({ children }) {
-  return <table className='table'>{children}</table>
-}
+see also:
 
-function Row ({ children }) {
-  return <tr className='row'>{children}</tr>
-}
-
-function Item ({ children }) {
-  return <td className='item'>{children}</td>
-})
-```
-
-???
-
-### hyperx
-
-```js
-const hyperx = require('hyperx')
-const React = require('react')
-const html = hyperx(React.createElement)
-
-module.exports = Table
-
-function Table ({ rows ) {
-  return html`<table class='table'>
-    ${rows.map(row => {
-      html`<tr class='row'>
-        ${row.map(item => {
-          html`<td class='item'>${item}</td>`
-        })}
-      </tr>`
-    })}
-  </table>`
-}
-```
-
-???
-
-- similar to JSX, but uses existing language features: tagged template string
+- [`hyperscript-helpers`](https://github.com/ohanhi/hyperscript-helpers)
+  - `div`, `span`, `ul`, `li`, etc functions
+- [`hyperx`](https://github.com/substack/hyperx)
+  - similar to JSX, but uses existing language features: tagged template literals
 
 ---
 class: success
@@ -571,7 +537,7 @@ const classNames = require('classnames')
 module.exports = Todos
 
 const Todos = ({ items }) => (
-  h(List, {}, items.map(item =>
+  h(List, null, items.map(item =>
     h(Item, { item })
   ))
 )
@@ -597,7 +563,7 @@ class: center, info
 ---
 class: danger
 
-### promise
+### promise spec
 
 ```js
 const promise = new Promise((resolve, reject) => {
@@ -615,6 +581,12 @@ promise
 ```
 
 ???
+
+https://tc39.github.io/ecma262/#sec-promise-objects
+
+TODO waterfall
+
+parallel
 
 ```js
 module.exports = fetchCats
@@ -658,6 +630,9 @@ can be passed around as an "eventual value", same as promises. but without the r
 - [`continuable`](https://github.com/Raynos/continuable)
 - [`cont`](https://github.com/dominictarr/cont)
 
+TODO waterfall
+
+parallel
 
 ```js
 const request = require('request')
@@ -667,8 +642,8 @@ module.exports = fetchCats
 
 function fetchCats ({ cats }) {
   return callback => parallel(cats.map(cat => {
-    return request(cat, callback)
-  }))
+    return callback => request(cat, callback)
+  }), callback)
 })
 ```
 
@@ -714,9 +689,9 @@ class: success
 
 reactive values using only functions!
 
-> - `thing()` gets the value
-> - `thing.set(...)` sets the value
-> - `thing(function (value) { ... })` listens to the value.
+- `thing()` gets the value
+- `thing.set(value)` sets the value
+- `thing((value) => { ... })` listens to the value
 
 ???
 
@@ -729,10 +704,36 @@ reactive values using only functions!
 class: success
 
 ```js
-TODO add mutant html example
+const { h, Struct, Value, when } = require('mutant')
+
+const toggle = (state) => {
+  state.set(!state())
+}
+
+const Activity = ({ activity: { isActive, text }) => (
+  h('div', {
+    style: {
+      color: when(isActive, 'green', 'red')
+    },
+    events: {
+      click: () => toggle(isActive)
+    }
+  }, text)
+)
+
+var activity = Struct({
+  text: Value('give a talk'),
+  isActive: Value(true)
+})
+var element = Activity({ activity })
+
+document.body.appendChild(element)
 ```
 
 ???
+
+- mutant has observables for all composite data structures: arrays, sets, dictionaries, etc
+- updates in-place, no dom diff-ing!
 
 ---
 class: center, info
@@ -791,14 +792,14 @@ pull streams could be its own talk, going to be a quick intro
 ---
 class: success
 
-#### source spec
+#### source
 
 ```js
 function createSource (...args) {
   // a source function accepts
   //   - abort: a boolean whether to signal end
   //   - callback: where to send next signal
-  return source (abort, callback) => {
+  return (abort, callback) => {
     if (abort || done) callback(true)
     else callback(null, value)
   }
@@ -925,13 +926,7 @@ function createThrough (...args) {
   return (source) => {
     // but return another source!
     return (abort, callback) {
-      // if the through should abort, pass that on.
-      source(abort, (err, value) => {
-        // if the source has an error, pass that on.
-        if (err) callback(err)
-        // else transform the value
-        else callback(null, transformValue(value))
-      })
+      // ...
     }
   }
 }
@@ -1291,12 +1286,12 @@ i appreciate the gift of your attention. ♥
 
 ## luddite.js apps
 
+- https://scuttlebutt.nz/
+- http://loopjs.com/
+- https://choo.io/
 - https://webtorrent.io/
 - http://standardjs.com/
 - https://peermaps.github.io/
-- http://loopjs.com/
-- https://scuttlebutt.nz/
-- https://choo.io/
 
 		</textarea>
 		<script>require=(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({"components/printing":[function(require,module,exports){
