@@ -39,9 +39,45 @@ slides are available at:
 ???
 
 - second time presenting at a conference.
+- i want to share what i am passionate about
+  - i might say negative things about some JavaScript patterns, but i use those patterns too
+  - i don't want to yuck your yum
 - i'll try to be upfront and honest, apologies in advance if i disguise any opinions as facts
-- i might say negative things about some JavaScript patterns, but i use those patterns too
 - in general everyone in the JavaScript community is doing a wonderful job, i appreciate your work
+
+---
+class: center, info
+
+## shout-out
+
+???
+
+- when i was writing this talk a few days ago, covered in Imposter Syndrome, i realized...
+  - someone inspired my passion behind this talk without me realizing
+
+---
+class: info
+
+### Douglas Engelbart
+
+augment human intellect
+
+<img src="./engelbart.jpg" height="350" class="center" />
+
+???
+
+- i take the Douglas Engelbart approach to developer experience
+- you may have heard of the Mother of all Demos, if not i highly recommend you check it out
+- he intended to boost collective intelligence to solve urgent global problems
+- Englebart's vision was that the power of technology came with inherent complexity
+- so priority is not ease of use but powerful human computer expression
+- let's evolve our JavaScript together to solve urgent global problems
+
+references:
+
+- https://alistapart.com/column/douglas-engelbart
+- http://www.dougengelbart.org/pubs/augment-3906.html
+- http://99percentinvisible.org/episode/of-mice-and-men/
 
 ---
 class: center
@@ -64,7 +100,7 @@ class: info
 
 ## Luddite?
 
-the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement against _automated centralized technology_.
+the [Luddites](https://en.wikipedia.org/wiki/Luddite) was a political movement against _centralized automated technology_.
 
 <img src="./luddite.jpg" height='300' class="center" />
 
@@ -81,7 +117,7 @@ class: info
 
 ## luddite.js?
 
-**luddite.js** is a (made-up) meme for _simple decentralized JavaScript_.
+**luddite.js** is a (made-up) meme for _decentralized simple JavaScript_.
 
 - decentralized userland ecosystems
 - simple patterns based on function signatures
@@ -127,13 +163,13 @@ npm install --global standard
 
 ???
 
+- a standard is one opinion, shared my many
 - tc39 is a great team advancing the state of the art in JavaScript,
-  - but the standards produced by tc39 are only one of _many_ possible JavaScript standards.
+  - but the standards produced by tc39 are only one of _many_ possible JavaScript opinions
+- we all have the power to create our own JavaScript opinions
+  - no experience necessary!
 - what other standards can you think of?
-  - JS syntax: babel plugins
-  - front-end: react
-  - back-end: express
-  - anything "best practice"
+  - anything "best practice", maybe even within a small niche community
 
 ---
 class: info
@@ -250,14 +286,10 @@ export const thing = thingy
 ???
 
 - why new syntax?
-  - there's myths that es modules do something new
-    - something about "tree shaking" 
-  - anything possible with es modules is possible without
-    - common shake
-  - who knew developers were so superstitious
+  - there's myths that es modules make possible something new
 - what is happening here?
-  - confusing to beginners who don't understand the special syntax and complex implementation details
-- breaks CommonJS code with default
+  - i find this can be confusing for beginners who don't understand the special syntax and complex implementation details
+- in the wild, export default breaks CommonJS code
   - yes, i'm bitter about this, i've lost many hours debugging broken code, only to realize the module author published a patch version that broke the CommonJS exports
 
 ---
@@ -302,18 +334,20 @@ class: danger
 ```js
 import React from 'react'
 
-export default Table
-
-function Table ({ table }) {
-  return <table className='table'>
-    {table.map(row => {
-      <tr className='row'>
-        {row.map(item => {
-          <td className='item'>{item}</td>
-        })
-      </tr>
-    })
-  </table>
+export default function ({ rows }) {
+  return (
+    <Table>
+      {rows.map(row =>
+        <Row>
+          {row.map(item =>
+            <Item>
+              {item}
+            </Item>
+          )}
+        </Row>
+      )}
+    </Table>
+  )
 }
 ```
 
@@ -325,6 +359,19 @@ function Table ({ table }) {
   - "why can't i use `if () { first } else { second }`?
   - can only use expressions, not statements
 
+```js
+function Table ({ children }) {
+  return <table className='table'>{children}</table>
+}
+
+function Row ({ children }) {
+  return <tr className='row'>{children}</tr>
+}
+
+function Item ({ children }) {
+  return <td className='item'>{children}</td>
+})
+```
 ---
 class: success
 
@@ -336,17 +383,39 @@ const h = require('react-hyperscript')
 module.exports = Table
 
 function Table ({ rows ) {
-  return h('table.table', rows.map(row => {
-    h('tr.row', row.map(item => {
-      h('td.item', item)
+  return h('table', {
+    className: 'table'
+  }, rows.map(row => {
+    h('tr', {
+      className: 'row'
+    }, row.map(item => {
+      h('td', {
+        className: 'item'
+      }, Item(item))
     })
   })
 }
+
 ```
 
 ???
 
-- `React.createElement` is basically a strict hyperscript without the class/id sugar
+- `React.createElement` is basically a strict hyperscript
+- syntax can be confusing at first
+
+```js
+function Table ({ children }) {
+  return <table className='table'>{children}</table>
+}
+
+function Row ({ children }) {
+  return <tr className='row'>{children}</tr>
+}
+
+function Item ({ children }) {
+  return <td className='item'>{children}</td>
+})
+```
 
 ---
 class: success
@@ -422,12 +491,19 @@ class: success
 a "continuable" is a function that takes a single argument, a node-style error-first callback
 
 ```js
-const continuable = (cb) => {
+const continuable = (callback) => {
   // do stuff...
-  cb(null, data)
+  callback(null, value)
   // oh no!
-  cb(error)
+  callback(error)
 }
+```
+
+```js
+continuable((err, value) => {
+  if (err) console.error(err)
+  else console.log(value)
+})
 ```
 
 ???
@@ -447,8 +523,8 @@ const parallel = require('run-parallel')
 module.exports = fetchCats
 
 function fetchCats ({ cats }) {
-  return cb => parallel(cats.map(cat => {
-    return request(cat, cb)
+  return callback => parallel(cats.map(cat => {
+    return request(cat, callback)
   }))
 })
 ```
@@ -460,8 +536,8 @@ class: info
 
 with a node-style error-first callback, there are three possible signals:
 
-1. value: `cb(null, value)`
-2. user error: `cb(error)`
+1. value: `callback(null, value)`
+2. user error: `callback(error)`
 3. programmer error: `throw error`
 
 ???
@@ -507,6 +583,15 @@ reactive values using only functions!
 - [`mutant`](https://github.com/mmckegg/mutant)
 
 ---
+class: success
+
+```js
+TODO add mutant html example
+```
+
+???
+
+---
 class: center, info
 
 ## values over time
@@ -542,7 +627,7 @@ class: success
 async streams using only functions!
 
 ```js
-pull(source(), through(), sink())
+pull(source, through, sink)
 ```
 
 - composable partial pipelines
@@ -563,9 +648,48 @@ pull streams could be its own talk, going to be a quick intro
 ---
 class: success
 
-##### source usage
+#### source spec
 
 ```js
+function createSource (...args) {
+  // a source function accepts
+  //   - abort: a boolean whether to signal end
+  //   - callback: where to send next signal
+  return source (abort, callback) => {
+    if (abort || done) callback(true)
+    else callback(null, value)
+  }
+}
+```
+
+???
+
+- look ma, just functions!
+- yes, we are using callbacks even for synchronous results
+  - much faster this way, no reason to delay til next tick
+
+```js
+function values (array) {
+  var i = 0
+  return (abort, callback) => {
+    if (abort || i === array.length) {
+      callback(true)
+    }
+    else {
+      callback(null, array[i++]
+    }
+  }
+}
+```
+
+---
+class: success
+
+#### source usage
+
+```js
+const values = require('pull-stream/sources/values')
+
 const source = values([0, 1, 2, 3])
 
 source(null, (err, value) {
@@ -577,27 +701,56 @@ source(null, (err, value) {
 ---
 class: success
 
-##### source example
+#### sink spec
 
 ```js
-function values (array) {
-  var i = 0
-  return (abort, callback) => {
-    if (abort || i === array.length) {
-      callback(true)
-    }
-    else {
-      cb(null, array[i++]
-    }
+function createSink (...args) {
+  // a sink function accepts a source
+  return (source) => {
+    // reads a value from the source
+    source(null, function next (err, value) {
+      // handle the result
+      if (err) return handleError(err)
+      handleValue(value)
+
+      // recursively call source again!
+      source(null, next)
+    })
   }
 }
 ```
 
 ???
 
-- look ma, just functions!
-- yes, we are using callbacks even for synchronous results
-  - much faster this way, no reason to delay til next tick
+- `handleError` might abort the source and call a done callback passed in through the args
+- `handleValue` might do something with each value
+
+
+```js
+function log (source) {
+  source(null, function next (err, data) {
+    if (err) return console.log(err)
+    console.log(data)
+    // recursively call source again!
+    source(null, next)
+  })
+}
+```
+
+with continuables:
+
+```js
+function log (source) {
+  return (callback) => {
+    source(null, function next (err, data) {
+      if (err) return callback(err)
+      console.log(data)
+      // recursively call source again!
+      source(null, next)
+    })
+  }
+}
+```
 
 ---
 class: success
@@ -605,7 +758,11 @@ class: success
 #### sink usage
 
 ```js
+const values = require('pull-stream/sources/values')
+const drain = require('pull-stream/sinks/drain')
+
 const source = values([0, 1, 2, 3])
+const log = drain(console.log)
 
 log(source)
 // 0
@@ -617,32 +774,41 @@ log(source)
 ---
 class: success
 
-#### sink example
+#### through spec
 
 ```js
-function log (read) {
-  read(null, function next (err, data) {
-    if (err) return console.log(err)
-    console.log(data)
-    // recursively call read again!
-    read(null, next)
-  })
+function createThrough (...args) {
+  // a sink function: accept a source
+  return (source) => {
+    // but return another source!
+    return (abort, callback) {
+      // if the through should abort, pass that on.
+      source(abort, (err, value) => {
+        // if the source has an error, pass that on.
+        if (err) callback(err)
+        // else transform the value
+        else callback(null, transformValue(value))
+      })
+    }
+  }
 }
 ```
 
 ???
 
-with continuables:
-
 ```js
-function log (read) {
-  return (cb) => {
-    read(null, function next (err, data) {
-      if (err) return cb(err)
-      console.log(data)
-      // recursively call read again!
-      read(null, next)
-    })
+function map (mapper) {
+  // a sink function: accept a source
+  return function (source) {
+    // but return another source!
+    return function (abort, callback) {
+      source(abort, function (err, data) {
+        // if the stream has ended, pass that on.
+        if (err) callback(err)
+        // apply a mapping to that data
+        else callback(null, mapper(data))
+      })
+    }
   }
 }
 ```
@@ -653,32 +819,32 @@ class: success
 #### through usage
 
 ```js
+const values = require('pull-stream/sources/values')
+const drain = require('pull-stream/sinks/drain')
+const map = require('pull-stream/throughs/map')
+
 const source = values([0, 1, 2, 3])
+const log = drain(console.log)
 const double = map(x => x * 2)
 
 log(double(source))
+// 0
+// 2
+// 4
+// 6
 ```
 
 ---
 class: success
 
-#### through example
+#### compose pull streams
 
 ```js
-function map (mapper) {
-  // a sink function: accept a source
-  return function (read) {
-    // but return another source!
-    return function (abort, cb) {
-      read(abort, function (err, data) {
-        // if the stream has ended, pass that on.
-        if (err) cb(err)
-        // apply a mapping to that data
-        else cb(null, mapper(data))
-      })
-    }
-  }
-}
+pull(source, through) // returns source
+
+pull(through, sink) // returns sink
+
+pull(source, sink) // runs to end
 ```
 
 ---
@@ -688,7 +854,7 @@ class: success
 
 ecosystem of modules: [pull-stream.github.io](https://pull-stream.github.io)
 
-```
+```js
 // parse a csv file
 pull(
   File(filename),
@@ -717,10 +883,10 @@ class: info
 
 with a pull stream source callback, there are four possible signals:
 
-1. value: `cb(null, value)`
-2. user error: `cb(error)`
+1. value: `callback(null, value)`
+2. user error: `callback(error)`
 3. programmer error: `throw error`
-4. complete: `cb(true)`
+4. complete: `callback(true)`
 
 ???
 
@@ -753,63 +919,27 @@ specification is a function signature, not a complex state machine
 ???
 
 - clear inputs and outputs
-- no hidden state to manage
+- small code blocks (or "snippets") can be deceiving
+  - leads to a positive first impression, until you use in production where the edge cases leak through the abstractions
+  - i find nothing more difficult than edge cases at scale caused by hiding complexity in our tools
 
 ---
 class: success
 
-### easier to understand
-
-less "snippet-driven development"
-
-more learnable tools focused on power users
-
-???
-
-- is probably a contentious opinion:
-  - yes promises are more "intuitive" than callbacks, a beginner can start using with less learning, training, or practice
-
-  His system, called NLS, showed actual instances of, or precursors to, hypertext, shared screen collaboration, multiple windows, on-screen video teleconferencing, and the mouse as an input device.
-
-  He intended to boost collective intelligence and enable knowledge workers to think in powerful new ways, to collectively solve urgent global problems.
-
-> The pendulum has swung about as far as it can toward the consumerization of computing technology, in which everything should be immediately intuitive and nothing should require learning, training, or practice. Engelbart’s vision was on the opposite end of that pendulum swing—he believed that the power of these tools came with inherent complexity.
-
----
-class: info
-
-#### augment human intellect
+### path to mastery
 
 learnable tools focused on power users
 
-<img src="./engelbart.jpg" height="350" class="center" />
+<img src="./training-wheels.jpg" height="350" class="center" />
 
 ???
 
-- i take the Douglas Engelbart approach to developer experience
-  - technology should augment human intellect, which means it should be a learnable tool focused on power users
-  - priority is not ease of use but powerful human computer expression
-
-references:
-
-- https://alistapart.com/column/douglas-engelbart
-- http://www.dougengelbart.org/pubs/augment-3906.html
-- http://99percentinvisible.org/episode/of-mice-and-men/
-
----
-class: info
-
-#### remove the training wheels!
-
-<img src="./training-wheels.jpg" height="425" class="center" />
-
-
-???
-
-"You don’t need any special training to operate a tricycle, and that’s fine if you’re just going to go around the block. If you’re trying to go up a hill or go a long distance, you want a real bike. The kind with gears and brakes– the kind that takes time to learn how to steer and balance on."
-
-how many hours do we spend writing complex code, why should we keep using the training-wheel abstractions best suited for unexperienced newbies?
-
+- training wheels are great to get started and go around the blockS
+- yes promises are easier than callbacks, a beginner can start using with less learning, training, or practice
+- but when you want to go up a hill or go a long distance, you want a real bike
+  - this takes time to learn how to steer and balance on
+- how many hours to do we spend writing complex code, is the most intuitive abstraction best suited for our evolving understanding?
+  - here's one of many possible abstractions, but is not the end answer
 
 ---
 class: center, info
@@ -827,34 +957,11 @@ build a framework from scratch, alone
 
 ???
 
-reinvent every wheel possible!
+reinvent every wheel possible! the entire web stack.
 
 https://github.com/root-systems/catstack
 
 i did it, but it was unsustainable, unable to transfer context to team
-
-- ui views
-  - hyps
-  - hyper-fela
-- ui state
-  - inu-engine
-  - inu
-  - inu-log
-  - inu-router
-- http handlers
-  - http-compose
-  - http-sender
-  - http-routes
-- services
-  - vas
-  - vas-http
-- modules
-  - depject
-  - depnest
-  - depject-priority
-- framework
-  - module system
-  - command-line tasks
 
 ---
 class: warning
@@ -926,14 +1033,20 @@ class: success, center
 
 #### offline social media
 
-<img src="./patchwork-screenshot.jpg" height="500" class="center" />
+<http://patchwork.campjs.com>
+
+<img src="./patchwork-screenshot.jpg" height="400" class="center" />
 
 ---
 class: success, center
 
 #### git projects
 
-<img src="./git-ssb-screenshot.png" height="450" class="center" />
+```js
+npm install -g git-ssb
+```
+
+<img src="./git-ssb-screenshot.png" height="400" class="center" />
 
 ---
 class: success
@@ -962,7 +1075,7 @@ class: info
 
 everyone has opinions.
 
-this one is mine. :3
+this one is mine. =^.^=
 
 ???
 
