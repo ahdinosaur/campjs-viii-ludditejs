@@ -928,6 +928,7 @@ software performance is less about gaining muscle, more about losing weight
 ???
 
 - code runs faster when it does less
+- was going to put a picture showing an over-powered muscly person versus a light and lean runner, but hey i'll leave it to your imagination :)
 - if you don't use fancy syntax (jsx, etc), you don't need fancy build steps
 
 ---
@@ -1166,6 +1167,11 @@ i appreciate the gift of your attention. ♥
 - [Art of Node](https://github.com/maxogden/art-of-node)
 - [Art of I/O](http://ioschool.is/art-of-io/sessions/0/?notes=true)
 - [Tiny Guide to Non Fancy Node](https://github.com/yoshuawuyts/tiny-guide-to-non-fancy-node)
+
+- [Simple made easy](http://www.infoq.com/presentations/Simple-Made-Easy)
+- [Programming with Hand Tools](https://www.youtube.com/watch?v=ShEez0JkOFw)
+- [Feynman's Nobel Amibition](http://www.physics.ohio-state.edu/~kilcup/262/feynman.html)
+- "[I want programming computers to be like coloring with crayons and playing with duplo blocks](https://news.ycombinator.com/item?id=4310723)"
 
 ## luddite.js apps
 
