@@ -70,8 +70,10 @@ augment human intellect
 - you may have heard of the Mother of all Demos, if not i highly recommend you check it out
 - he intended to boost collective intelligence to solve urgent global problems
 - Englebart's vision was that the power of technology came with inherent complexity
+  - not a good idea to sweep complexity under the rug
 - so priority is not ease of use but powerful human computer expression
-- let's evolve our JavaScript together to solve urgent global problems
+  - kinda the opposite of Steve Jobs
+- keen to evolve our JavaScript with this in mind
 
 references:
 
@@ -93,7 +95,6 @@ class: center
 ???
 
 an ambiguous utopia
-
 
 ---
 class: info
@@ -153,7 +154,7 @@ class: info
 
 ### what is a standard?
 
-anything that enough people use is a "standard"
+a standard is an opinion about a pattern
 
 example: ["standard style"](https://github.com/feross/standard)
 
@@ -163,7 +164,7 @@ npm install --global standard
 
 ???
 
-- a standard is one opinion, shared my many
+- an opinion that enough people agree with is a serious standard
 - tc39 is a great team advancing the state of the art in JavaScript,
   - but the standards produced by tc39 are only one of _many_ possible JavaScript opinions
 - we all have the power to create our own JavaScript opinions
@@ -290,8 +291,6 @@ export const thing = thingy
   - there's myths that es modules make possible something new
 - what is happening here?
   - i find this can be confusing for beginners who don't understand the special syntax and complex implementation details
-- in the wild, export default breaks CommonJS code
-  - yes, i'm bitter about this, i've lost many hours debugging broken code, only to realize the module author published a patch version that broke the CommonJS exports
 
 ---
 class: success
@@ -321,7 +320,49 @@ module.exports = { thing: thingy }
   - run code in JavaScript interpreter
   - capture result of `module.exports` variable
 - when i started using Node.js from Python, `require`-as-a-function is what excited me the most
-  - so yes, i'm somewhat bitter that now JavaScript is adopting the same syntax as Python
+
+---
+class: success
+
+### depject
+
+```js
+const module = {
+  needs: {
+    message: {
+      layout: 'first',
+      render: 'map',
+      decorate: 'reduce'
+    }
+  },
+  gives: {
+    message: {
+      view: true
+    }
+  },
+  create: ({ message: { layout, render, decorate }) => {
+    return { message: { view } }
+
+    function view () {}
+  }
+}
+
+combine([modules...])
+```
+
+???
+
+https://github.com/depject/depject
+
+- dependency injection for overlapping opinions
+- each module is an object with exposes `{ needs, gives, create }`
+- `needs` is a map of names to types
+  - first: use the first module that has an opinion about a thing
+  - map: get each module's opinion about a thing
+  - reduce: compose each module's opinion about a thing into one opinion
+- gives is an object of names to export
+- create is a function which receives needed plugs and returns given plugs
+
 ---
 class: center, info
 
@@ -364,6 +405,7 @@ const Item = ({ item: { isActive, text } }) => {
   - hides that JSX is actually `React.createElement` function calls
   - "why can't i use `if () { first } else { second }`?
   - can only use expressions, not statements
+- new syntax means you need a special code syntax highlighter, i ran out of time
 
 ---
 
@@ -398,8 +440,8 @@ const Item = ({ item: { isActive, text } }) => {
 
 ???
 
-- syntax can be confusing at first
-- `React.createElement` is basically a strict hyperscript
+- same with lust functions
+- syntax can be unattractive at first
 
 see also:
 
@@ -437,6 +479,10 @@ const Item = ({ item: { isActive, text } }) => {
   return h('div', { className }, text)
 )
 ```
+
+???
+
+- `React.createElement` is basically a strict hyperscript
 
 ---
 class: center, info
@@ -545,7 +591,10 @@ with a node-style error-first callback, there are three possible signals:
 
 - promise errors smush the user and programmer errors together
 - promises wrap all your handlers in a `try` / `catch`, so even if you have a different opinion about error handling, promises will force it's opinion on you
-  - yes, i'm bitter about this, i've lost many hours trying to figure out where my errors went
+
+i could talk about how to do pipe continuable as a waterfall, in parallel, etc, but...
+
+both continuables and promises have their own place in hell, we need better abstractions.
 
 ---
 class: center, info
@@ -726,6 +775,23 @@ source(null, (err, value) {
 ```
 
 ---
+class: info
+
+#### pull stream errors
+
+with a pull stream source callback, there are four possible signals:
+
+1. value: `callback(null, value)`
+2. user error: `callback(error)`
+3. programmer error: `throw error`
+4. complete: `callback(true)`
+
+???
+
+- both the source and sink can signal back-pressure ("hey i'm busy") by not calling the respective callback
+
+
+---
 class: success
 
 #### sink spec
@@ -861,6 +927,8 @@ class: success
 #### compose pull streams
 
 ```js
+pull(source, through, sink) === sink(through(source))
+
 pull(source, through) // returns source
 
 pull(through, sink) // returns sink
@@ -898,22 +966,6 @@ function CSV () {
 obviously you don't want to re-implement simple streams from scratch all the time
 
 ---
-class: info
-
-#### pull stream errors
-
-with a pull stream source callback, there are four possible signals:
-
-1. value: `callback(null, value)`
-2. user error: `callback(error)`
-3. programmer error: `throw error`
-4. complete: `callback(true)`
-
-???
-
-- both the source and sink can signal back-pressure ("hey i'm busy") by not calling the respective callback
-
----
 class: center, info
 
 ## why should you be a JavaScript luddite?
@@ -923,7 +975,11 @@ class: success
 
 ### better performance
 
-software performance is less about gaining muscle, more about losing weight
+software performance is
+
+less about gaining muscle
+
+more about losing weight
 
 ???
 
@@ -936,7 +992,9 @@ class: success
 
 ### easier to describe
 
-specification is a function signature, not a complex state machine
+specification is a function signature,
+
+not a complex state machine
 
 ???
 
@@ -1055,7 +1113,9 @@ class: success, center
 
 #### offline social media
 
-<http://patchwork.campjs.com>
+[patchwork.campjs.com](http://patchwork.campjs.com)
+& 
+[scuttlebutt.nz](https://www.scuttlebutt.nz)
 
 <img src="./patchwork-screenshot.jpg" height="400" class="center" />
 
@@ -1135,9 +1195,9 @@ class: info
 
 ### all the "standards"
 
-make up your own "standards"!
+make up your own opinions!
 
-you have just as much a right to make the next JavaScript standard as anyone else.
+your opinion about JavaScript is valid.
 
 ???
 
